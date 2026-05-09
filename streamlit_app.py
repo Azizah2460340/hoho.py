@@ -2,111 +2,104 @@ import streamlit as st
 import pandas as pd
 import sqlite3
 from datetime import datetime
-import plotly.express as px
 
 # ==================== KONFIGURASI HALAMAN ====================
 st.set_page_config(page_title="MDMS - CV Amal Mulia", layout="wide", page_icon="🌿")
 
-# ==================== CSS TEMA HIJAU & EMAS ====================
+# ==================== CSS TEMA DOMINAN HIJAU ====================
 st.markdown("""
 <style>
-    /* Warna dasar */
     :root {
-        --hijau: #1e3c2c;
-        --emas: #D4AF37;
+        --hijau-gelap: #1b4d2e;
+        --hijau-utama: #2e7d5e;
+        --hijau-muda: #88b04b;
+        --putih-soft: #f9faf7;
+        --krem: #efece4;
     }
-    /* Background utama */
     .stApp {
-        background-color: #f5f0e6;
+        background-color: var(--krem);
     }
     /* Sidebar hijau gelap */
     .css-1d391kg, .css-12oz5g0 {
-        background-color: var(--hijau) !important;
+        background-color: var(--hijau-gelap) !important;
     }
-    .sidebar-content {
-        color: white;
+    .sidebar-content, .css-1d391kg * {
+        color: #e8f0e8 !important;
     }
-    /* Judul sidebar */
-    .css-1d391kg h2, .css-12oz5g0 h2 {
-        color: var(--emas) !important;
-    }
-    /* Tombol umum */
     .stButton button {
-        background-color: var(--emas);
-        color: var(--hijau);
+        background-color: var(--hijau-utama);
+        color: white;
         border-radius: 30px;
         font-weight: bold;
         border: none;
-        transition: 0.3s;
+        transition: 0.2s;
     }
     .stButton button:hover {
-        background-color: #b8942e;
+        background-color: #236b4f;
         color: white;
     }
-    /* Card putih untuk konten */
     .white-card {
         background-color: white;
         border-radius: 24px;
         padding: 1.8rem 2rem;
         margin-bottom: 1.5rem;
         box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        border-top: 5px solid var(--emas);
+        border-top: 5px solid var(--hijau-utama);
     }
-    /* Metric */
     .metric-box {
-        background: linear-gradient(135deg, #ffffff, #f9f7f0);
+        background-color: #ffffff;
         border-radius: 20px;
         padding: 1rem;
         text-align: center;
-        border: 1px solid #e0d5b5;
+        border: 1px solid #cde0cd;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
     .metric-value {
         font-size: 2.2rem;
         font-weight: bold;
-        color: var(--hijau);
+        color: var(--hijau-gelap);
     }
-    /* Tab styling */
     .stTabs [data-baseweb="tab-list"] {
         gap: 12px;
-        background-color: transparent;
     }
     .stTabs [data-baseweb="tab"] {
-        background-color: #f0ede5;
+        background-color: #e2e8e0;
         border-radius: 40px;
         padding: 8px 24px;
         font-weight: 600;
-        color: var(--hijau);
+        color: var(--hijau-gelap);
     }
     .stTabs [aria-selected="true"] {
-        background-color: var(--hijau);
+        background-color: var(--hijau-utama);
         color: white;
     }
-    /* Tabel */
+    .footer {
+        text-align: center;
+        margin-top: 2rem;
+        padding: 1rem;
+        color: #5e6e5c;
+        font-size: 0.8rem;
+    }
+    hr {
+        border-color: var(--hijau-muda);
+    }
+    /* Dataframe */
     .dataframe {
         background: white;
         border-radius: 16px;
         overflow: hidden;
     }
-    /* Footer */
-    .footer {
-        text-align: center;
-        margin-top: 2rem;
-        padding: 1rem;
-        color: #7c6e3c;
-        font-size: 0.8rem;
-    }
 </style>
 """, unsafe_allow_html=True)
 
-# ==================== LOGO PERUSAHAAN (opsional) ====================
-# Letakkan file logo.png di folder yang sama, atau ganti dengan URL gambar
+# ==================== LOGO / HEADER SIDEBAR ====================
 try:
-    st.sidebar.image("logo.png", use_column_width=True)  # ganti dengan path logo Anda
+    st.sidebar.image("logo.png", use_column_width=True)
 except:
-    st.sidebar.markdown("## 🌿 **CV AMAL MULIA**")
-    st.sidebar.markdown("<hr style='border-color:#D4AF37'>", unsafe_allow_html=True)
+    st.sidebar.markdown("## 🌱 **CV AMAL MULIA**")
+    st.sidebar.markdown("<hr>", unsafe_allow_html=True)
 
-# ==================== FUNGSI DATABASE ====================
+# ==================== DATABASE ====================
 def get_connection():
     return sqlite3.connect('makloon.db', check_same_thread=False)
 
@@ -158,12 +151,12 @@ def get_df(query, params=()):
 
 init_db()
 
-# ==================== LOGIN & REGISTER ====================
+# ==================== LOGIN & REGISTRASI ====================
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
 if not st.session_state.authenticated:
-    st.title("🏭 MDMS - CV Amal Mulia")
+    st.title("🌿 MDMS - CV Amal Mulia")
     menu = st.radio("", ["Masuk", "Daftar"], horizontal=True)
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
@@ -183,7 +176,7 @@ if not st.session_state.authenticated:
                         st.error("Username atau password salah")
         else:
             with st.form("register"):
-                st.subheader("📝 Daftar")
+                st.subheader("📝 Daftar Akun Baru")
                 new_u = st.text_input("Username baru")
                 new_p = st.text_input("Password", type="password")
                 role = st.selectbox("Daftar sebagai", ["distributor", "klien"])
@@ -206,11 +199,10 @@ with st.sidebar:
         st.session_state.authenticated = False
         st.rerun()
 
-# ==================== AREA UTAMA ====================
-# Card putih untuk selamat datang
+# ==================== SELAMAT DATANG ====================
 st.markdown(f"""
 <div class="white-card">
-    <h2>🌿 Selamat datang, {st.session_state.username}</h2>
+    <h2>🌱 Selamat datang, {st.session_state.username}</h2>
     <p>{datetime.now().strftime('%A, %d %B %Y')}</p>
 </div>
 """, unsafe_allow_html=True)
@@ -218,9 +210,8 @@ st.markdown(f"""
 role = st.session_state.role
 username = st.session_state.username
 
-# ============= DASHBOARD PABRIK =============
+# ==================== PABRIK ====================
 if role == "pabrik":
-    # Metrics
     total_stok = get_df("SELECT SUM(stok) FROM produk").iloc[0,0] or 0
     pesanan_makloon = get_df("SELECT SUM(jumlah) FROM pesanan WHERE jenis_pesanan='makloon' AND status='Proses Produksi'").iloc[0,0] or 0
     order_wait = get_df("SELECT SUM(jumlah) FROM pesanan WHERE jenis_pesanan='order_stok' AND status='Menunggu Konfirmasi'").iloc[0,0] or 0
@@ -233,7 +224,6 @@ if role == "pabrik":
     with col3:
         st.markdown(f'<div class="metric-box"><div class="metric-value">{order_wait}</div><div>⏳ Order Menunggu</div></div>', unsafe_allow_html=True)
     
-    # Tabs
     tab1, tab2, tab3 = st.tabs(["📦 Manajemen Stok", "🏭 Pesanan Makloon", "🛒 Order Stok Masuk"])
     
     with tab1:
@@ -241,7 +231,6 @@ if role == "pabrik":
         st.subheader("Stok Produk")
         df_produk = get_df("SELECT nama, stok, stok_minimum, harga_jual FROM produk")
         st.dataframe(df_produk, use_container_width=True, hide_index=True)
-        
         with st.expander("✏️ Update Stok"):
             pilih = st.selectbox("Produk", df_produk['nama'])
             stok_baru = st.number_input("Stok baru", min_value=0, step=1)
@@ -295,11 +284,11 @@ if role == "pabrik":
                             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
 
-# ============= DASHBOARD DISTRIBUTOR =============
+# ==================== DISTRIBUTOR ====================
 elif role == "distributor":
     st.markdown('<div class="white-card">', unsafe_allow_html=True)
     st.subheader("🏪 Portal Distributor")
-    tabA, tabB = st.tabs(["Lihat Stok", "Order Stok"])
+    tabA, tabB = st.tabs(["📦 Lihat Stok", "🛒 Order Stok"])
     with tabA:
         df = get_df("SELECT nama, stok, harga_jual FROM produk")
         st.dataframe(df, use_container_width=True, hide_index=True)
@@ -315,11 +304,11 @@ elif role == "distributor":
             st.success("Order dikirim")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ============= DASHBOARD KLIEN =============
+# ==================== KLIEN ====================
 elif role == "klien":
     st.markdown('<div class="white-card">', unsafe_allow_html=True)
     st.subheader("🤝 Klien")
-    tabC, tabD = st.tabs(["Status Pesanan Makloon", "Order Stok"])
+    tabC, tabD = st.tabs(["📋 Status Pesanan Makloon", "🛒 Order Stok"])
     with tabC:
         df = get_df("SELECT produk, jumlah, status, tanggal_masuk FROM pesanan WHERE klien=? AND jenis_pesanan='makloon'", (username,))
         if df.empty:
@@ -339,5 +328,5 @@ elif role == "klien":
             st.success("Order stok dikirim")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Footer
-st.markdown('<div class="footer">© 2025 CV Amal Mulia — Sistem Manajemen Produksi & Distribusi</div>', unsafe_allow_html=True)
+# ==================== FOOTER ====================
+st.markdown('<div class="footer">🌿 © 2025 CV Amal Mulia — Sistem Manajemen Produksi & Distribusi</div>', unsafe_allow_html=True)
