@@ -256,7 +256,7 @@ if not st.session_state.authenticated:
     st.markdown("""
     <div class="white-card">
         <h1>🌴 OrderStock - CV Amal Mulia</h1>
-        <p>Sistem Manajemen Produksi & Distribusi Herbal</p>
+        <p> Manajemen Pesanan & Distribusi Stok</p>
     </div>
     """, unsafe_allow_html=True)
 
