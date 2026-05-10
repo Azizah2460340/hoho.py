@@ -562,8 +562,6 @@ if role == "pabrik":
 # =========================================================
 elif role == "klien":
 
-    st.markdown('<div class="white-card">', unsafe_allow_html=True)
-
     tab1,tab2 = st.tabs([
         "🏭 Pesan Makloon",
         "📋 Status Pesanan"
