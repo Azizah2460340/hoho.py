@@ -638,8 +638,6 @@ elif role == "klien":
                 hide_index=True
             )
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
 # =========================================================
 # ==================== DISTRIBUTOR ========================
 # =========================================================
@@ -711,8 +709,6 @@ elif role == "distributor":
 
             st.success("Order berhasil dikirim")
             st.rerun()
-
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # ==================== FOOTER ====================
 st.markdown("""
