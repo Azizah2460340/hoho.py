@@ -435,22 +435,30 @@ if role == "pabrik":
             submit = st.form_submit_button(
                 "Tambah Produk"
             )
-
+            
             if submit:
+            
+                try:
+            
+                    run_query("""
+                    INSERT INTO produk
+                    (nama,stok,stok_minimum,harga_jual)
+                    VALUES (?,?,?,?)
+                    """, (
+                        nama,
+                        stok,
+                        stok_min,
+                        harga
+                    ))
+            
+                    st.success("Produk berhasil ditambahkan")
+                    st.rerun()
 
-                df_produk = get_df("""
-                SELECT nama,stok,stok_minimum,harga_jual
-                FROM produk
-                """)
-                
-                # FORMAT RUPIAH
-                df_produk["harga_jual"] = df_produk["harga_jual"].apply(
-                    lambda x: f"Rp {x:,.0f}".replace(",", ".")
-                )
-                st.success("Produk berhasil ditambahkan")
-                st.rerun()
-
-        st.markdown('</div>', unsafe_allow_html=True)
+                except sqlite3.IntegrityError:
+                    st.error("Nama produk sudah ada")
+                            )
+                            st.success("Produk berhasil ditambahkan")
+                            st.rerun()
 
     # ==================== ORDER MASUK ====================
     with tab3:
