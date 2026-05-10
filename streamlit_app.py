@@ -227,9 +227,12 @@ def init_db():
 
         c.execute("SELECT COUNT(*) FROM produk")
         if c.fetchone()[0] == 0:
-            produk_data = [
-                ('Sari Kurma Alami', 500, 50, 15000),
-                ('Sari Kurma Madu', 300, 50, 25000)
+           produk_data = [
+    ('Sari Kurma Premium', 500, 50, 35000),
+    ('Sari Kurma Herbal Obat Batuk', 300, 50, 40000),
+    ('Sari Kurma Lambung', 250, 50, 45000),
+    ('Sari Kurma Al-Jazira', 600, 50, 30000)
+]
             ]
             c.executemany(
                 "INSERT INTO produk (nama, stok, stok_minimum, harga_jual) VALUES (?,?,?,?)",
@@ -385,8 +388,59 @@ if role == "pabrik":
             <div class="metric-title">⏳ Menunggu</div>
         </div>
         """, unsafe_allow_html=True)
+st.divider()
 
-    st.success("Tema dashboard berhasil dibuat dominan hijau 🌿")
+st.subheader("➕ Tambah Produk Baru")
+
+with st.form("tambah_produk"):
+
+    nama_produk = st.text_input("Nama Produk")
+
+    stok_awal = st.number_input(
+        "Stok Awal",
+        min_value=0,
+        step=1
+    )
+
+    stok_min = st.number_input(
+        "Stok Minimum",
+        min_value=0,
+        value=50
+    )
+
+    harga = st.number_input(
+        "Harga Jual",
+        min_value=0,
+        step=1000
+    )
+
+    submit_produk = st.form_submit_button("Tambah Produk")
+
+    if submit_produk:
+
+        cek = get_df(
+            "SELECT * FROM produk WHERE nama=?",
+            (nama_produk,)
+        )
+
+        if cek.empty:
+
+            run_query("""
+                INSERT INTO produk
+                (nama, stok, stok_minimum, harga_jual)
+                VALUES (?,?,?,?)
+            """, (
+                nama_produk,
+                stok_awal,
+                stok_min,
+                harga
+            ))
+
+            st.success("Produk berhasil ditambahkan")
+            st.rerun()
+
+        else:
+            st.error("Produk sudah ada")
 # ==================== KLIEN ====================
 elif role == "klien":
 
