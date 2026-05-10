@@ -643,7 +643,7 @@ elif role == "distributor":
 
     tab1,tab2,tab3 = st.tabs([        
         "📦 Lihat Produk",
-        "🛒 Order Stok"
+        "🛒 Order Stok",
         "📊 Stok Saya"
     ])
 
@@ -665,7 +665,7 @@ elif role == "distributor":
             hide_index=True
         )
     # ==================== ORDER ====================
-    with tab2:
+        with tab2:
 
         produk = st.selectbox(
             "Pilih Produk",
@@ -709,7 +709,7 @@ elif role == "distributor":
             st.success("Order berhasil dikirim")
             st.rerun()
         # ==================== STOK SAYA ====================
-     with tab3:
+       with tab3:
  
         df_stok = get_df("""
         SELECT produk,stok
