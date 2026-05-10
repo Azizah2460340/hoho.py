@@ -25,7 +25,6 @@ st.markdown("""
     background: linear-gradient(135deg,#eef8f1,#f7fcf8);
 }
 
-/* SIDEBAR */
 section[data-testid="stSidebar"]{
     background: linear-gradient(180deg,#0f3d2e,#1b5e45);
 }
@@ -34,7 +33,6 @@ section[data-testid="stSidebar"] *{
     color:white !important;
 }
 
-/* CARD */
 .white-card{
     background:white;
     border-radius:22px;
@@ -44,7 +42,6 @@ section[data-testid="stSidebar"] *{
     border-left:6px solid var(--green-main);
 }
 
-/* BUTTON */
 .stButton button{
     background: linear-gradient(135deg,#1f7a59,#2f9e75);
     color:white;
@@ -53,7 +50,6 @@ section[data-testid="stSidebar"] *{
     font-weight:bold;
 }
 
-/* TABS */
 .stTabs [data-baseweb="tab"]{
     background:#e7f5ec;
     border-radius:20px;
@@ -65,7 +61,6 @@ section[data-testid="stSidebar"] *{
     color:white;
 }
 
-/* METRIC */
 .metric-box{
     background:white;
     border-radius:20px;
@@ -124,6 +119,16 @@ def init_db():
             tanggal_masuk TEXT,
             jenis_pesanan TEXT,
             created_by TEXT
+        )
+        """)
+
+        # ===== STOK DISTRIBUTOR =====
+        c.execute("""
+        CREATE TABLE IF NOT EXISTS stok_distributor(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            distributor TEXT,
+            produk TEXT,
+            stok INTEGER
         )
         """)
 
@@ -196,7 +201,6 @@ init_db()
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
-# ==================== BELUM LOGIN ====================
 if not st.session_state.authenticated:
 
     st.markdown("""
@@ -216,7 +220,6 @@ if not st.session_state.authenticated:
 
     with col2:
 
-        # ===== LOGIN =====
         if menu == "Masuk":
 
             with st.form("login"):
@@ -250,7 +253,6 @@ if not st.session_state.authenticated:
                     else:
                         st.error("Username/password salah")
 
-        # ===== REGISTER =====
         else:
 
             with st.form("register"):
@@ -362,6 +364,24 @@ if role == "pabrik":
         </div>
         """, unsafe_allow_html=True)
 
+    # WARNING STOK DISTRIBUTOR
+    stok_dist = get_df("""
+    SELECT *
+    FROM stok_distributor
+    WHERE stok <= 50
+    """)
+
+    if not stok_dist.empty:
+
+        st.warning("⚠️ Ada stok distributor menipis")
+
+        for _, row in stok_dist.iterrows():
+
+            st.info(
+                f"Distributor {row['distributor']} | "
+                f"{row['produk']} tersisa {row['stok']} pcs"
+            )
+
     tab1,tab2,tab3,tab4 = st.tabs([
         "📦 Stok",
         "➕ Tambah Produk",
@@ -376,42 +396,16 @@ if role == "pabrik":
         SELECT nama,stok,stok_minimum,harga_jual
         FROM produk
         """)
-        
+
         df_produk["harga_jual"] = df_produk["harga_jual"].apply(
             lambda x: f"Rp {x:,.0f}".replace(",", ".")
         )
-        
+
         st.dataframe(
             df_produk,
             use_container_width=True,
             hide_index=True
         )
-
-        st.divider()
-
-        pilih = st.selectbox(
-            "Pilih Produk",
-            df_produk["nama"]
-        )
-
-        tambah = st.number_input(
-            "Tambah stok",
-            min_value=0,
-            step=1
-        )
-
-        if st.button("Tambah Stok"):
-
-            run_query("""
-            UPDATE produk
-            SET stok = stok + ?
-            WHERE nama=?
-            """,(tambah,pilih))
-
-            st.success("Stok berhasil ditambahkan")
-            st.rerun()
-
-        st.markdown('</div>', unsafe_allow_html=True)
 
     # ==================== TAMBAH PRODUK ====================
     with tab2:
@@ -439,11 +433,11 @@ if role == "pabrik":
             submit = st.form_submit_button(
                 "Tambah Produk"
             )
-            
+
             if submit:
-            
+
                 try:
-            
+
                     run_query("""
                     INSERT INTO produk
                     (nama,stok,stok_minimum,harga_jual)
@@ -454,7 +448,7 @@ if role == "pabrik":
                         stok_min,
                         harga
                     ))
-            
+
                     st.success("Produk berhasil ditambahkan")
                     st.rerun()
 
@@ -494,11 +488,57 @@ if role == "pabrik":
                             key=f"ok_{row['id']}"
                         ):
 
+                            # update status
                             run_query("""
                             UPDATE pesanan
                             SET status='Diproses'
                             WHERE id=?
                             """,(row['id'],))
+
+                            # kurangi stok pabrik
+                            run_query("""
+                            UPDATE produk
+                            SET stok = stok - ?
+                            WHERE nama=?
+                            """,(
+                                row['jumlah'],
+                                row['produk']
+                            ))
+
+                            # cek stok distributor
+                            cek = get_df("""
+                            SELECT *
+                            FROM stok_distributor
+                            WHERE distributor=? AND produk=?
+                            """,(
+                                row['created_by'],
+                                row['produk']
+                            ))
+
+                            # update stok distributor
+                            if not cek.empty:
+
+                                run_query("""
+                                UPDATE stok_distributor
+                                SET stok = stok + ?
+                                WHERE distributor=? AND produk=?
+                                """,(
+                                    row['jumlah'],
+                                    row['created_by'],
+                                    row['produk']
+                                ))
+
+                            else:
+
+                                run_query("""
+                                INSERT INTO stok_distributor
+                                (distributor,produk,stok)
+                                VALUES (?,?,?)
+                                """,(
+                                    row['created_by'],
+                                    row['produk'],
+                                    row['jumlah']
+                                ))
 
                             st.success("Pesanan diproses")
                             st.rerun()
@@ -517,8 +557,6 @@ if role == "pabrik":
                             """,(row['id'],))
 
                             st.rerun()
-
-        st.markdown('</div>', unsafe_allow_html=True)
 
     # ==================== KONFIRMASI ====================
     with tab4:
@@ -555,8 +593,6 @@ if role == "pabrik":
                         st.success("Pesanan selesai")
                         st.rerun()
 
-        st.markdown('</div>', unsafe_allow_html=True)
-
 # =========================================================
 # ==================== ROLE KLIEN =========================
 # =========================================================
@@ -567,14 +603,11 @@ elif role == "klien":
         "📋 Status Pesanan"
     ])
 
-    # ==================== PESAN ====================
     with tab1:
 
         with st.form("makloon"):
 
-            produk = st.text_input(
-                "Nama Produk"
-            )
+            produk = st.text_input("Nama Produk")
 
             jumlah = st.number_input(
                 "Jumlah Produksi",
@@ -585,9 +618,7 @@ elif role == "klien":
                 "Asal PT / Brand"
             )
 
-            catatan = st.text_area(
-                "Catatan"
-            )
+            catatan = st.text_area("Catatan")
 
             submit = st.form_submit_button(
                 "Kirim Pesanan"
@@ -615,7 +646,6 @@ elif role == "klien":
                 st.success("Pesanan berhasil dikirim")
                 st.rerun()
 
-    # ==================== STATUS ====================
     with tab2:
 
         df = get_df("""
@@ -625,23 +655,18 @@ elif role == "klien":
         ORDER BY id DESC
         """,(username,))
 
-        if df.empty:
-            st.info("Belum ada pesanan")
-
-        else:
-
-            st.dataframe(
-                df,
-                use_container_width=True,
-                hide_index=True
-            )
+        st.dataframe(
+            df,
+            use_container_width=True,
+            hide_index=True
+        )
 
 # =========================================================
 # ==================== DISTRIBUTOR ========================
 # =========================================================
 elif role == "distributor":
 
-    tab1,tab2,tab3 = st.tabs([        
+    tab1,tab2,tab3 = st.tabs([
         "📦 Lihat Produk",
         "🛒 Order Stok",
         "📊 Stok Saya"
@@ -654,16 +679,17 @@ elif role == "distributor":
         SELECT nama,stok,harga_jual
         FROM produk
         """)
-        
+
         df["harga_jual"] = df["harga_jual"].apply(
             lambda x: f"Rp {x:,.0f}".replace(",", ".")
         )
-        
+
         st.dataframe(
             df,
             use_container_width=True,
             hide_index=True
         )
+
     # ==================== ORDER ====================
     with tab2:
 
@@ -708,26 +734,28 @@ elif role == "distributor":
 
             st.success("Order berhasil dikirim")
             st.rerun()
+
     # ==================== STOK SAYA ====================
     with tab3:
- 
+
         df_stok = get_df("""
         SELECT produk,stok
         FROM stok_distributor
         WHERE distributor=?
         """,(username,))
-    
+
         if df_stok.empty:
-    
+
             st.info("Belum memiliki stok")
-    
+
         else:
-    
+
             st.dataframe(
                 df_stok,
                 use_container_width=True,
                 hide_index=True
             )
+
 # ==================== FOOTER ====================
 st.markdown("""
 <div class="footer">
