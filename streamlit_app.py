@@ -36,8 +36,11 @@ section[data-testid="stSidebar"]{
     border-right: 2px solid rgba(255,255,255,0.08);
 }
 
-section[data-testid="stSidebar"] *{
-    color: #f2fff8 !important;
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] div{
+    color:white !important;
 }
 
 /* ===== HEADER CARD ===== */
@@ -384,3 +387,100 @@ if role == "pabrik":
         """, unsafe_allow_html=True)
 
     st.success("Tema dashboard berhasil dibuat dominan hijau 🌿")
+# ==================== KLIEN ====================
+elif role == "klien":
+
+    st.markdown('<div class="white-card">', unsafe_allow_html=True)
+
+    st.subheader("🤝 Portal Klien")
+
+    tabC, tabD = st.tabs([
+        "🏭 Pesan Makloon",
+        "📋 Status Pesanan"
+    ])
+
+    # ==================== TAB PESAN MAKLOON ====================
+    with tabC:
+
+        st.markdown("### Form Pemesanan Makloon")
+
+        with st.form("form_klien_makloon"):
+
+            nama_produk = st.text_input(
+                "Nama Produk",
+                placeholder="Contoh: Sari Kurma Premium"
+            )
+
+            jumlah = st.number_input(
+                "Jumlah Produksi",
+                min_value=1,
+                step=1
+            )
+
+            asal_pt = st.text_input(
+                "Asal PT / Brand",
+                placeholder="Contoh: PT Herbal Nusantara"
+            )
+
+            catatan = st.text_area(
+                "Catatan Tambahan",
+                placeholder="Kemasan, rasa, ukuran, dll"
+            )
+
+            submit = st.form_submit_button("Kirim Pesanan")
+
+            if submit:
+
+                if nama_produk and asal_pt:
+
+                    run_query("""
+                        INSERT INTO pesanan
+                        (klien, produk, jumlah, status,
+                         tanggal_masuk, jenis_pesanan, created_by)
+
+                        VALUES (?,?,?,?,?,?,?)
+                    """, (
+                        asal_pt,
+                        nama_produk,
+                        jumlah,
+                        "Menunggu Konfirmasi",
+                        datetime.now().strftime("%Y-%m-%d %H:%M"),
+                        "makloon",
+                        username
+                    ))
+
+                    st.success(
+                        "Pesanan makloon berhasil dikirim"
+                    )
+
+                    st.rerun()
+
+                else:
+                    st.error("Lengkapi semua data")
+
+    # ==================== STATUS PESANAN ====================
+    with tabD:
+
+        st.markdown("### Status Pesanan Anda")
+
+        df = get_df("""
+            SELECT
+                produk,
+                jumlah,
+                status,
+                tanggal_masuk
+            FROM pesanan
+            WHERE created_by=?
+            ORDER BY id DESC
+        """, (username,))
+
+        if df.empty:
+            st.info("Belum ada pesanan")
+        else:
+            st.dataframe(
+                df,
+                use_container_width=True,
+                hide_index=True
+            )
+
+    st.markdown('</div>', unsafe_allow_html=True)
