@@ -4,99 +4,182 @@ import sqlite3
 from datetime import datetime
 
 # ==================== KONFIGURASI HALAMAN ====================
-st.set_page_config(page_title="MDMS - CV Amal Mulia", layout="wide", page_icon="🌿")
+st.set_page_config(
+    page_title="MDMS - CV Amal Mulia",
+    layout="wide",
+    page_icon="🌴"
+)
 
-# ==================== CSS TEMA DOMINAN HIJAU ====================
+# ==================== CSS TEMA HIJAU ELEGAN ====================
 st.markdown("""
 <style>
-    :root {
-        --hijau-gelap: #1b4d2e;
-        --hijau-utama: #2e7d5e;
-        --hijau-muda: #88b04b;
-        --putih-soft: #f9faf7;
-        --krem: #efece4;
-    }
-    .stApp {
-        background-color: var(--krem);
-    }
-    /* Sidebar hijau gelap */
-    .css-1d391kg, .css-12oz5g0 {
-        background-color: var(--hijau-gelap) !important;
-    }
-    .sidebar-content, .css-1d391kg * {
-        color: #e8f0e8 !important;
-    }
-    .stButton button {
-        background-color: var(--hijau-utama);
-        color: white;
-        border-radius: 30px;
-        font-weight: bold;
-        border: none;
-        transition: 0.2s;
-    }
-    .stButton button:hover {
-        background-color: #236b4f;
-        color: white;
-    }
-    .white-card {
-        background-color: white;
-        border-radius: 24px;
-        padding: 1.8rem 2rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        border-top: 5px solid var(--hijau-utama);
-    }
-    .metric-box {
-        background-color: #ffffff;
-        border-radius: 20px;
-        padding: 1rem;
-        text-align: center;
-        border: 1px solid #cde0cd;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-    }
-    .metric-value {
-        font-size: 2.2rem;
-        font-weight: bold;
-        color: var(--hijau-gelap);
-    }
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 12px;
-    }
-    .stTabs [data-baseweb="tab"] {
-        background-color: #e2e8e0;
-        border-radius: 40px;
-        padding: 8px 24px;
-        font-weight: 600;
-        color: var(--hijau-gelap);
-    }
-    .stTabs [aria-selected="true"] {
-        background-color: var(--hijau-utama);
-        color: white;
-    }
-    .footer {
-        text-align: center;
-        margin-top: 2rem;
-        padding: 1rem;
-        color: #5e6e5c;
-        font-size: 0.8rem;
-    }
-    hr {
-        border-color: var(--hijau-muda);
-    }
-    /* Dataframe */
-    .dataframe {
-        background: white;
-        border-radius: 16px;
-        overflow: hidden;
-    }
+/* ===== WARNA UTAMA ===== */
+:root{
+    --green-dark:#0f3d2e;
+    --green-main:#1f7a59;
+    --green-soft:#2f9e75;
+    --green-light:#dff5ea;
+    --green-bg:#f4fbf7;
+    --white:#ffffff;
+    --text:#18352a;
+}
+
+/* ===== BACKGROUND APP ===== */
+.stApp{
+    background: linear-gradient(135deg,#eef8f1,#f7fcf8);
+    color: var(--text);
+}
+
+/* ===== SIDEBAR ===== */
+section[data-testid="stSidebar"]{
+    background: linear-gradient(180deg,#0f3d2e,#1b5e45);
+    border-right: 2px solid rgba(255,255,255,0.08);
+}
+
+section[data-testid="stSidebar"] *{
+    color: #f2fff8 !important;
+}
+
+/* ===== HEADER CARD ===== */
+.white-card{
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    border-radius: 24px;
+    padding: 1.8rem 2rem;
+    margin-bottom: 1.5rem;
+    border-left: 8px solid var(--green-main);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* ===== METRIC BOX ===== */
+.metric-box{
+    background: linear-gradient(135deg,#ffffff,#f0faf4);
+    border-radius: 22px;
+    padding: 1.2rem;
+    text-align:center;
+    border:1px solid #d9eee2;
+    box-shadow:0 4px 10px rgba(0,0,0,0.04);
+    transition:0.2s;
+}
+
+.metric-box:hover{
+    transform: translateY(-3px);
+}
+
+.metric-value{
+    font-size:2.4rem;
+    font-weight:700;
+    color:var(--green-dark);
+}
+
+.metric-title{
+    color:#3d5f52;
+    font-weight:600;
+    margin-top:8px;
+}
+
+/* ===== BUTTON ===== */
+.stButton button{
+    width:100%;
+    background: linear-gradient(135deg,#1f7a59,#2f9e75);
+    color:white;
+    border:none;
+    border-radius:30px;
+    padding:0.65rem 1rem;
+    font-weight:700;
+    transition:0.25s;
+}
+
+.stButton button:hover{
+    background: linear-gradient(135deg,#17684b,#23805f);
+    transform:scale(1.01);
+    color:white;
+}
+
+/* ===== INPUT ===== */
+.stTextInput input,
+.stNumberInput input,
+.stSelectbox div[data-baseweb="select"]{
+    border-radius:16px !important;
+    border:1px solid #bfe3cf !important;
+    background-color:#fcfffd !important;
+}
+
+/* ===== TAB ===== */
+.stTabs [data-baseweb="tab-list"]{
+    gap:14px;
+}
+
+.stTabs [data-baseweb="tab"]{
+    background:#e7f5ec;
+    border-radius:30px;
+    padding:10px 22px;
+    color:#1b5e45;
+    font-weight:700;
+}
+
+.stTabs [aria-selected="true"]{
+    background:linear-gradient(135deg,#1f7a59,#2f9e75);
+    color:white !important;
+}
+
+/* ===== DATAFRAME ===== */
+[data-testid="stDataFrame"]{
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid #dceee3;
+}
+
+/* ===== EXPANDER ===== */
+.streamlit-expanderHeader{
+    background:#edf8f1;
+    border-radius:14px;
+    color:#1b5e45 !important;
+    font-weight:700;
+}
+
+/* ===== INFO / SUCCESS ===== */
+.stSuccess{
+    border-radius:14px;
+}
+
+.stInfo{
+    border-radius:14px;
+}
+
+/* ===== FOOTER ===== */
+.footer{
+    text-align:center;
+    margin-top:2rem;
+    padding:1rem;
+    color:#4d6b5f;
+    font-size:0.85rem;
+}
+
+/* ===== HR ===== */
+hr{
+    border:1px solid #bfe3cf;
+}
+
+/* ===== TITLE ===== */
+h1,h2,h3{
+    color:#174d38;
+}
+
+/* ===== RADIO ===== */
+div[role="radiogroup"]{
+    background:#edf8f1;
+    padding:10px;
+    border-radius:20px;
+}
 </style>
 """, unsafe_allow_html=True)
 
 # ==================== LOGO / HEADER SIDEBAR ====================
 try:
-    st.sidebar.image("logo.png", use_column_width=True)
+    st.sidebar.image("logo.png", use_container_width=True)
 except:
-    st.sidebar.markdown("## 🌱 **CV AMAL MULIA**")
+    st.sidebar.markdown("## 🌴 CV AMAL MULIA")
     st.sidebar.markdown("<hr>", unsafe_allow_html=True)
 
 # ==================== DATABASE ====================
@@ -106,12 +189,14 @@ def get_connection():
 def init_db():
     with get_connection() as conn:
         c = conn.cursor()
+
         c.execute('''CREATE TABLE IF NOT EXISTS produk (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nama TEXT UNIQUE,
                     stok INTEGER,
                     stok_minimum INTEGER DEFAULT 50,
                     harga_jual INTEGER)''')
+
         c.execute('''CREATE TABLE IF NOT EXISTS pesanan (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     klien TEXT,
@@ -122,21 +207,32 @@ def init_db():
                     jenis_pesanan TEXT,
                     created_by TEXT,
                     tanggal_konfirmasi TEXT)''')
+
         c.execute('''CREATE TABLE IF NOT EXISTS users (
                     username TEXT PRIMARY KEY,
                     password TEXT,
                     role TEXT)''')
+
         c.execute("SELECT COUNT(*) FROM users")
         if c.fetchone()[0] == 0:
-            users_data = [('pabrik', 'pabrik123', 'pabrik'),
-                          ('distributor1', 'dist123', 'distributor'),
-                          ('klien1', 'klien123', 'klien')]
+            users_data = [
+                ('pabrik', 'pabrik123', 'pabrik'),
+                ('distributor1', 'dist123', 'distributor'),
+                ('klien1', 'klien123', 'klien')
+            ]
             c.executemany("INSERT INTO users VALUES (?,?,?)", users_data)
+
         c.execute("SELECT COUNT(*) FROM produk")
         if c.fetchone()[0] == 0:
-            produk_data = [('Sari Kurma Alami', 500, 50, 15000),
-                           ('Sari Kurma Madu', 300, 50, 25000)]
-            c.executemany("INSERT INTO produk (nama, stok, stok_minimum, harga_jual) VALUES (?,?,?,?)", produk_data)
+            produk_data = [
+                ('Sari Kurma Alami', 500, 50, 15000),
+                ('Sari Kurma Madu', 300, 50, 25000)
+            ]
+            c.executemany(
+                "INSERT INTO produk (nama, stok, stok_minimum, harga_jual) VALUES (?,?,?,?)",
+                produk_data
+            )
+
         conn.commit()
 
 def run_query(query, params=()):
@@ -151,22 +247,39 @@ def get_df(query, params=()):
 
 init_db()
 
-# ==================== LOGIN & REGISTRASI ====================
+# ==================== LOGIN ====================
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
 if not st.session_state.authenticated:
-    st.title("🌿 MDMS - CV Amal Mulia")
+
+    st.markdown("""
+    <div class="white-card">
+        <h1>🌴 OrderStock - CV Amal Mulia</h1>
+        <p>Sistem Manajemen Produksi & Distribusi Herbal</p>
+    </div>
+    """, unsafe_allow_html=True)
+
     menu = st.radio("", ["Masuk", "Daftar"], horizontal=True)
+
     col1, col2, col3 = st.columns([1,2,1])
+
     with col2:
+
         if menu == "Masuk":
+
             with st.form("login"):
                 st.subheader("🔐 Login")
+
                 u = st.text_input("Username")
                 p = st.text_input("Password", type="password")
-                if st.form_submit_button("Masuk", use_container_width=True):
-                    res = get_df("SELECT role FROM users WHERE username=? AND password=?", (u, p))
+
+                if st.form_submit_button("Masuk"):
+                    res = get_df(
+                        "SELECT role FROM users WHERE username=? AND password=?",
+                        (u, p)
+                    )
+
                     if not res.empty:
                         st.session_state.authenticated = True
                         st.session_state.username = u
@@ -174,35 +287,54 @@ if not st.session_state.authenticated:
                         st.rerun()
                     else:
                         st.error("Username atau password salah")
+
         else:
+
             with st.form("register"):
                 st.subheader("📝 Daftar Akun Baru")
+
                 new_u = st.text_input("Username baru")
                 new_p = st.text_input("Password", type="password")
-                role = st.selectbox("Daftar sebagai", ["distributor", "klien"])
-                if st.form_submit_button("Daftar", use_container_width=True):
+
+                role = st.selectbox(
+                    "Daftar sebagai",
+                    ["distributor", "klien"]
+                )
+
+                if st.form_submit_button("Daftar"):
                     if new_u and new_p:
-                        cek = get_df("SELECT * FROM users WHERE username=?", (new_u,))
+
+                        cek = get_df(
+                            "SELECT * FROM users WHERE username=?",
+                            (new_u,)
+                        )
+
                         if cek.empty:
-                            run_query("INSERT INTO users VALUES (?,?,?)", (new_u, new_p, role))
-                            st.success("Akun berhasil dibuat, silakan login")
+                            run_query(
+                                "INSERT INTO users VALUES (?,?,?)",
+                                (new_u, new_p, role)
+                            )
+                            st.success("Akun berhasil dibuat")
                         else:
                             st.error("Username sudah terdaftar")
+
     st.stop()
 
 # ==================== SIDEBAR ====================
 with st.sidebar:
-    st.markdown(f"### 👤 **{st.session_state.username}**")
+
+    st.markdown(f"### 👤 {st.session_state.username}")
     st.markdown(f"**Role:** `{st.session_state.role.upper()}`")
     st.markdown("---")
-    if st.button("🚪 Logout", use_container_width=True):
+
+    if st.button("🚪 Logout"):
         st.session_state.authenticated = False
         st.rerun()
 
-# ==================== SELAMAT DATANG ====================
+# ==================== DASHBOARD ====================
 st.markdown(f"""
 <div class="white-card">
-    <h2>🌱 Selamat datang, {st.session_state.username}</h2>
+    <h2>🌱 Selamat Datang, {st.session_state.username}</h2>
     <p>{datetime.now().strftime('%A, %d %B %Y')}</p>
 </div>
 """, unsafe_allow_html=True)
@@ -212,121 +344,43 @@ username = st.session_state.username
 
 # ==================== PABRIK ====================
 if role == "pabrik":
-    total_stok = get_df("SELECT SUM(stok) FROM produk").iloc[0,0] or 0
-    pesanan_makloon = get_df("SELECT SUM(jumlah) FROM pesanan WHERE jenis_pesanan='makloon' AND status='Proses Produksi'").iloc[0,0] or 0
-    order_wait = get_df("SELECT SUM(jumlah) FROM pesanan WHERE jenis_pesanan='order_stok' AND status='Menunggu Konfirmasi'").iloc[0,0] or 0
-    
+
+    total_stok = get_df(
+        "SELECT SUM(stok) FROM produk"
+    ).iloc[0,0] or 0
+
+    pesanan_makloon = get_df(
+        "SELECT SUM(jumlah) FROM pesanan WHERE jenis_pesanan='makloon'"
+    ).iloc[0,0] or 0
+
+    order_wait = get_df(
+        "SELECT SUM(jumlah) FROM pesanan WHERE status='Menunggu Konfirmasi'"
+    ).iloc[0,0] or 0
+
     col1, col2, col3 = st.columns(3)
+
     with col1:
-        st.markdown(f'<div class="metric-box"><div class="metric-value">{total_stok}</div><div>📦 Total Stok</div></div>', unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="metric-box">
+            <div class="metric-value">{total_stok}</div>
+            <div class="metric-title">📦 Total Stok</div>
+        </div>
+        """, unsafe_allow_html=True)
+
     with col2:
-        st.markdown(f'<div class="metric-box"><div class="metric-value">{pesanan_makloon}</div><div>🏭 Pesanan Makloon</div></div>', unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="metric-box">
+            <div class="metric-value">{pesanan_makloon}</div>
+            <div class="metric-title">🏭 Pesanan Makloon</div>
+        </div>
+        """, unsafe_allow_html=True)
+
     with col3:
-        st.markdown(f'<div class="metric-box"><div class="metric-value">{order_wait}</div><div>⏳ Order Menunggu</div></div>', unsafe_allow_html=True)
-    
-    tab1, tab2, tab3 = st.tabs(["📦 Manajemen Stok", "🏭 Pesanan Makloon", "🛒 Order Stok Masuk"])
-    
-    with tab1:
-        st.markdown('<div class="white-card">', unsafe_allow_html=True)
-        st.subheader("Stok Produk")
-        df_produk = get_df("SELECT nama, stok, stok_minimum, harga_jual FROM produk")
-        st.dataframe(df_produk, use_container_width=True, hide_index=True)
-        with st.expander("✏️ Update Stok"):
-            pilih = st.selectbox("Produk", df_produk['nama'])
-            stok_baru = st.number_input("Stok baru", min_value=0, step=1)
-            if st.button("Perbarui Stok"):
-                run_query("UPDATE produk SET stok = ? WHERE nama = ?", (stok_baru, pilih))
-                st.success("Stok diperbarui")
-                st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
-    
-    with tab2:
-        st.markdown('<div class="white-card">', unsafe_allow_html=True)
-        st.subheader("Tambah Pesanan Makloon")
-        with st.form("form_makloon"):
-            klien = st.text_input("Nama Klien")
-            produk = st.selectbox("Produk", df_produk['nama'])
-            jumlah = st.number_input("Jumlah", 1, 10000)
-            if st.form_submit_button("Simpan"):
-                if klien:
-                    run_query("""INSERT INTO pesanan (klien, produk, jumlah, status, tanggal_masuk, jenis_pesanan, created_by)
-                                 VALUES (?,?,?,?,?,?,?)""",
-                              (klien, produk, jumlah, "Proses Produksi", datetime.now().strftime("%Y-%m-%d %H:%M"), "makloon", username))
-                    st.success("Pesanan tersimpan")
-                    st.rerun()
-        st.divider()
-        df_mak = get_df("SELECT klien, produk, jumlah, status, tanggal_masuk FROM pesanan WHERE jenis_pesanan='makloon'")
-        st.dataframe(df_mak, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-    
-    with tab3:
-        st.markdown('<div class="white-card">', unsafe_allow_html=True)
-        df_order = get_df("SELECT * FROM pesanan WHERE jenis_pesanan='order_stok' AND status='Menunggu Konfirmasi'")
-        if df_order.empty:
-            st.info("Tidak ada order menunggu")
-        else:
-            for _, row in df_order.iterrows():
-                with st.expander(f"Order dari {row['klien']} - {row['produk']} x {row['jumlah']}"):
-                    stok_skrg = get_df("SELECT stok FROM produk WHERE nama=?", (row['produk'],)).iloc[0]['stok']
-                    colA, colB = st.columns(2)
-                    with colA:
-                        if st.button("✅ Setujui", key=f"ok_{row['id']}"):
-                            if row['jumlah'] <= stok_skrg:
-                                run_query("UPDATE produk SET stok = stok - ? WHERE nama=?", (row['jumlah'], row['produk']))
-                                run_query("UPDATE pesanan SET status='Disetujui', tanggal_konfirmasi=? WHERE id=?", (datetime.now().strftime("%Y-%m-%d %H:%M"), row['id']))
-                                st.success("Order disetujui, stok berkurang")
-                                st.rerun()
-                            else:
-                                st.error("Stok tidak cukup")
-                    with colB:
-                        if st.button("❌ Tolak", key=f"no_{row['id']}"):
-                            run_query("UPDATE pesanan SET status='Ditolak' WHERE id=?", (row['id'],))
-                            st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="metric-box">
+            <div class="metric-value">{order_wait}</div>
+            <div class="metric-title">⏳ Menunggu</div>
+        </div>
+        """, unsafe_allow_html=True)
 
-# ==================== DISTRIBUTOR ====================
-elif role == "distributor":
-    st.markdown('<div class="white-card">', unsafe_allow_html=True)
-    st.subheader("🏪 Portal Distributor")
-    tabA, tabB = st.tabs(["📦 Lihat Stok", "🛒 Order Stok"])
-    with tabA:
-        df = get_df("SELECT nama, stok, harga_jual FROM produk")
-        st.dataframe(df, use_container_width=True, hide_index=True)
-    with tabB:
-        produk = st.selectbox("Produk", get_df("SELECT nama FROM produk")['nama'])
-        stok_tersedia = get_df("SELECT stok FROM produk WHERE nama=?", (produk,)).iloc[0]['stok']
-        st.write(f"Stok tersedia: {stok_tersedia}")
-        jumlah = st.number_input("Jumlah", 1, stok_tersedia)
-        if st.button("Kirim Order"):
-            run_query("""INSERT INTO pesanan (klien, produk, jumlah, status, tanggal_masuk, jenis_pesanan, created_by)
-                         VALUES (?,?,?,?,?,?,?)""",
-                      (username, produk, jumlah, "Menunggu Konfirmasi", datetime.now().strftime("%Y-%m-%d %H:%M"), "order_stok", username))
-            st.success("Order dikirim")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# ==================== KLIEN ====================
-elif role == "klien":
-    st.markdown('<div class="white-card">', unsafe_allow_html=True)
-    st.subheader("🤝 Klien")
-    tabC, tabD = st.tabs(["📋 Status Pesanan Makloon", "🛒 Order Stok"])
-    with tabC:
-        df = get_df("SELECT produk, jumlah, status, tanggal_masuk FROM pesanan WHERE klien=? AND jenis_pesanan='makloon'", (username,))
-        if df.empty:
-            st.info("Belum ada pesanan makloon")
-        else:
-            st.dataframe(df, use_container_width=True)
-    with tabD:
-        produk = st.selectbox("Pilih Produk", get_df("SELECT nama FROM produk")['nama'])
-        stok = get_df("SELECT stok, harga_jual FROM produk WHERE nama=?", (produk,)).iloc[0]
-        st.metric("Stok tersedia", stok['stok'])
-        st.caption(f"Harga: Rp {stok['harga_jual']:,.0f}")
-        jumlah = st.number_input("Jumlah", 1, stok['stok'])
-        if st.button("Order Sekarang"):
-            run_query("""INSERT INTO pesanan (klien, produk, jumlah, status, tanggal_masuk, jenis_pesanan, created_by)
-                         VALUES (?,?,?,?,?,?,?)""",
-                      (username, produk, jumlah, "Menunggu Konfirmasi", datetime.now().strftime("%Y-%m-%d %H:%M"), "order_stok", username))
-            st.success("Order stok dikirim")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# ==================== FOOTER ====================
-st.markdown('<div class="footer">🌿 © 2025 CV Amal Mulia — Sistem Manajemen Produksi & Distribusi</div>', unsafe_allow_html=True)
+    st.success("Tema dashboard berhasil dibuat dominan hijau 🌿")
