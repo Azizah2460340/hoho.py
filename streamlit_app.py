@@ -376,7 +376,11 @@ if role == "pabrik":
         SELECT nama,stok,stok_minimum,harga_jual
         FROM produk
         """)
-
+        
+        df_produk["harga_jual"] = df_produk["harga_jual"].apply(
+            lambda x: f"Rp {x:,.0f}".replace(",", ".")
+        )
+        
         st.dataframe(
             df_produk,
             use_container_width=True,
