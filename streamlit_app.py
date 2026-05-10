@@ -438,16 +438,15 @@ if role == "pabrik":
 
             if submit:
 
-                run_query("""
-                 df_produk = get_df("""
+                df_produk = get_df("""
                 SELECT nama,stok,stok_minimum,harga_jual
                 FROM produk
                 """)
                 
+                # FORMAT RUPIAH
                 df_produk["harga_jual"] = df_produk["harga_jual"].apply(
                     lambda x: f"Rp {x:,.0f}".replace(",", ".")
                 )
-
                 st.success("Produk berhasil ditambahkan")
                 st.rerun()
 
