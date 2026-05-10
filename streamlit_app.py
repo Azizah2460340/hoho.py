@@ -412,8 +412,6 @@ if role == "pabrik":
     # ==================== TAMBAH PRODUK ====================
     with tab2:
 
-        st.markdown('<div class="white-card">', unsafe_allow_html=True)
-
         with st.form("produk_baru"):
 
             nama = st.text_input("Nama Produk")
@@ -441,10 +439,14 @@ if role == "pabrik":
             if submit:
 
                 run_query("""
-                INSERT INTO produk
-                (nama,stok,stok_minimum,harga_jual)
-                VALUES (?,?,?,?)
-                """,(nama,stok,stok_min,harga))
+                 df_produk = get_df("""
+                SELECT nama,stok,stok_minimum,harga_jual
+                FROM produk
+                """)
+                
+                df_produk["harga_jual"] = df_produk["harga_jual"].apply(
+                    lambda x: f"Rp {x:,.0f}".replace(",", ".")
+                )
 
                 st.success("Produk berhasil ditambahkan")
                 st.rerun()
@@ -453,8 +455,6 @@ if role == "pabrik":
 
     # ==================== ORDER MASUK ====================
     with tab3:
-
-        st.markdown('<div class="white-card">', unsafe_allow_html=True)
 
         df_order = get_df("""
         SELECT *
@@ -514,8 +514,6 @@ if role == "pabrik":
 
     # ==================== KONFIRMASI ====================
     with tab4:
-
-        st.markdown('<div class="white-card">', unsafe_allow_html=True)
 
         df_konf = get_df("""
         SELECT *
