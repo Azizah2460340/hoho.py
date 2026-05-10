@@ -312,7 +312,7 @@ with st.sidebar:
 # ==================== HEADER ====================
 st.markdown(f"""
 <div class="white-card">
-    <h2>🌱 Selamat Datang, {username}</h2>
+    <h2>🏢 Selamat Datang, {username}</h2>
     <p>{datetime.now().strftime('%A, %d %B %Y')}</p>
 </div>
 """, unsafe_allow_html=True)
@@ -371,8 +371,6 @@ if role == "pabrik":
 
     # ==================== STOK ====================
     with tab1:
-
-        st.markdown('<div class="white-card">', unsafe_allow_html=True)
 
         df_produk = get_df("""
         SELECT nama,stok,stok_minimum,harga_jual
