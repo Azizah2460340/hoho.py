@@ -456,9 +456,6 @@ if role == "pabrik":
 
                 except sqlite3.IntegrityError:
                     st.error("Nama produk sudah ada")
-                    )
-                    st.success("Produk berhasil ditambahkan")
-                    st.rerun()
 
     # ==================== ORDER MASUK ====================
     with tab3:
