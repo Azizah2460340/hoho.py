@@ -653,20 +653,20 @@ elif role == "distributor":
     # ==================== PRODUK ====================
     with tab1:
 
-    df = get_df("""
-    SELECT nama,stok,harga_jual
-    FROM produk
-    """)
-    
-    df["harga_jual"] = df["harga_jual"].apply(
-        lambda x: f"Rp {x:,.0f}".replace(",", ".")
-    )
-    
-    st.dataframe(
-        df,
-        use_container_width=True,
-        hide_index=True
-    )
+        df = get_df("""
+        SELECT nama,stok,harga_jual
+        FROM produk
+        """)
+        
+        df["harga_jual"] = df["harga_jual"].apply(
+            lambda x: f"Rp {x:,.0f}".replace(",", ".")
+        )
+        
+        st.dataframe(
+            df,
+            use_container_width=True,
+            hide_index=True
+        )
     # ==================== ORDER ====================
     with tab2:
 
