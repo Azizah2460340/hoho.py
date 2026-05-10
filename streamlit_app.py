@@ -25,6 +25,7 @@ st.markdown("""
     background: linear-gradient(135deg,#eef8f1,#f7fcf8);
 }
 
+/* SIDEBAR */
 section[data-testid="stSidebar"]{
     background: linear-gradient(180deg,#0f3d2e,#1b5e45);
 }
@@ -33,6 +34,7 @@ section[data-testid="stSidebar"] *{
     color:white !important;
 }
 
+/* CARD */
 .white-card{
     background:white;
     border-radius:22px;
@@ -42,6 +44,7 @@ section[data-testid="stSidebar"] *{
     border-left:6px solid var(--green-main);
 }
 
+/* BUTTON */
 .stButton button{
     background: linear-gradient(135deg,#1f7a59,#2f9e75);
     color:white;
@@ -50,6 +53,7 @@ section[data-testid="stSidebar"] *{
     font-weight:bold;
 }
 
+/* TABS */
 .stTabs [data-baseweb="tab"]{
     background:#e7f5ec;
     border-radius:20px;
@@ -61,6 +65,7 @@ section[data-testid="stSidebar"] *{
     color:white;
 }
 
+/* METRIC */
 .metric-box{
     background:white;
     border-radius:20px;
@@ -201,6 +206,7 @@ init_db()
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
+# ==================== BELUM LOGIN ====================
 if not st.session_state.authenticated:
 
     st.markdown("""
@@ -220,6 +226,7 @@ if not st.session_state.authenticated:
 
     with col2:
 
+        # ===== LOGIN =====
         if menu == "Masuk":
 
             with st.form("login"):
@@ -253,6 +260,7 @@ if not st.session_state.authenticated:
                     else:
                         st.error("Username/password salah")
 
+        # ===== REGISTER =====
         else:
 
             with st.form("register"):
@@ -364,7 +372,7 @@ if role == "pabrik":
         </div>
         """, unsafe_allow_html=True)
 
-    # WARNING STOK DISTRIBUTOR
+    # ==================== WARNING STOK DISTRIBUTOR ====================
     stok_dist = get_df("""
     SELECT *
     FROM stok_distributor
@@ -382,11 +390,12 @@ if role == "pabrik":
                 f"{row['produk']} tersisa {row['stok']} pcs"
             )
 
-    tab1,tab2,tab3,tab4 = st.tabs([
+    tab1,tab2,tab3,tab4,tab5 = st.tabs([
         "📦 Stok",
         "➕ Tambah Produk",
         "🛒 Order Masuk",
-        "✅ Konfirmasi"
+        "✅ Konfirmasi",
+        "📊 Stok Distributor"
     ])
 
     # ==================== STOK ====================
@@ -406,6 +415,30 @@ if role == "pabrik":
             use_container_width=True,
             hide_index=True
         )
+
+        st.divider()
+
+        pilih = st.selectbox(
+            "Pilih Produk",
+            df_produk["nama"]
+        )
+
+        tambah = st.number_input(
+            "Tambah stok",
+            min_value=0,
+            step=1
+        )
+
+        if st.button("Tambah Stok"):
+
+            run_query("""
+            UPDATE produk
+            SET stok = stok + ?
+            WHERE nama=?
+            """,(tambah,pilih))
+
+            st.success("Stok berhasil ditambahkan")
+            st.rerun()
 
     # ==================== TAMBAH PRODUK ====================
     with tab2:
@@ -488,7 +521,7 @@ if role == "pabrik":
                             key=f"ok_{row['id']}"
                         ):
 
-                            # update status
+                            # update status pesanan
                             run_query("""
                             UPDATE pesanan
                             SET status='Diproses'
@@ -505,40 +538,42 @@ if role == "pabrik":
                                 row['produk']
                             ))
 
-                            # cek stok distributor
-                            cek = get_df("""
-                            SELECT *
-                            FROM stok_distributor
-                            WHERE distributor=? AND produk=?
-                            """,(
-                                row['created_by'],
-                                row['produk']
-                            ))
+                            # kalau distributor
+                            if row['jenis_pesanan'] == "order_stok":
 
-                            # update stok distributor
-                            if not cek.empty:
-
-                                run_query("""
-                                UPDATE stok_distributor
-                                SET stok = stok + ?
+                                cek = get_df("""
+                                SELECT *
+                                FROM stok_distributor
                                 WHERE distributor=? AND produk=?
                                 """,(
-                                    row['jumlah'],
                                     row['created_by'],
                                     row['produk']
                                 ))
 
-                            else:
+                                # update stok distributor
+                                if not cek.empty:
 
-                                run_query("""
-                                INSERT INTO stok_distributor
-                                (distributor,produk,stok)
-                                VALUES (?,?,?)
-                                """,(
-                                    row['created_by'],
-                                    row['produk'],
-                                    row['jumlah']
-                                ))
+                                    run_query("""
+                                    UPDATE stok_distributor
+                                    SET stok = stok + ?
+                                    WHERE distributor=? AND produk=?
+                                    """,(
+                                        row['jumlah'],
+                                        row['created_by'],
+                                        row['produk']
+                                    ))
+
+                                else:
+
+                                    run_query("""
+                                    INSERT INTO stok_distributor
+                                    (distributor,produk,stok)
+                                    VALUES (?,?,?)
+                                    """,(
+                                        row['created_by'],
+                                        row['produk'],
+                                        row['jumlah']
+                                    ))
 
                             st.success("Pesanan diproses")
                             st.rerun()
@@ -593,6 +628,27 @@ if role == "pabrik":
                         st.success("Pesanan selesai")
                         st.rerun()
 
+    # ==================== STOK DISTRIBUTOR ====================
+    with tab5:
+
+        df_dist = get_df("""
+        SELECT distributor, produk, stok
+        FROM stok_distributor
+        ORDER BY distributor
+        """)
+
+        if df_dist.empty:
+
+            st.info("Belum ada stok distributor")
+
+        else:
+
+            st.dataframe(
+                df_dist,
+                use_container_width=True,
+                hide_index=True
+            )
+
 # =========================================================
 # ==================== ROLE KLIEN =========================
 # =========================================================
@@ -603,11 +659,14 @@ elif role == "klien":
         "📋 Status Pesanan"
     ])
 
+    # ==================== PESAN ====================
     with tab1:
 
         with st.form("makloon"):
 
-            produk = st.text_input("Nama Produk")
+            produk = st.text_input(
+                "Nama Produk"
+            )
 
             jumlah = st.number_input(
                 "Jumlah Produksi",
@@ -618,7 +677,9 @@ elif role == "klien":
                 "Asal PT / Brand"
             )
 
-            catatan = st.text_area("Catatan")
+            catatan = st.text_area(
+                "Catatan"
+            )
 
             submit = st.form_submit_button(
                 "Kirim Pesanan"
@@ -646,6 +707,7 @@ elif role == "klien":
                 st.success("Pesanan berhasil dikirim")
                 st.rerun()
 
+    # ==================== STATUS ====================
     with tab2:
 
         df = get_df("""
@@ -655,11 +717,16 @@ elif role == "klien":
         ORDER BY id DESC
         """,(username,))
 
-        st.dataframe(
-            df,
-            use_container_width=True,
-            hide_index=True
-        )
+        if df.empty:
+            st.info("Belum ada pesanan")
+
+        else:
+
+            st.dataframe(
+                df,
+                use_container_width=True,
+                hide_index=True
+            )
 
 # =========================================================
 # ==================== DISTRIBUTOR ========================
