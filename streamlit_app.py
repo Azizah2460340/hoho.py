@@ -709,25 +709,25 @@ elif role == "distributor":
             st.success("Order berhasil dikirim")
             st.rerun()
         # ==================== STOK SAYA ====================
-        with tab3:
-        
-            df_stok = get_df("""
-            SELECT produk,stok
-            FROM stok_distributor
-            WHERE distributor=?
-            """,(username,))
-        
-            if df_stok.empty:
-        
-                st.info("Belum memiliki stok")
-        
-            else:
-        
-                st.dataframe(
-                    df_stok,
-                    use_container_width=True,
-                    hide_index=True
-                )
+     with tab3:
+ 
+        df_stok = get_df("""
+        SELECT produk,stok
+        FROM stok_distributor
+        WHERE distributor=?
+        """,(username,))
+    
+        if df_stok.empty:
+    
+            st.info("Belum memiliki stok")
+    
+        else:
+    
+            st.dataframe(
+                df_stok,
+                use_container_width=True,
+                hide_index=True
+            )
 # ==================== FOOTER ====================
 st.markdown("""
 <div class="footer">
