@@ -390,8 +390,6 @@ if role == "pabrik":
 # ==================== KLIEN ====================
 elif role == "klien":
 
-    st.markdown('<div class="white-card">', unsafe_allow_html=True)
-
     st.subheader("🤝 Portal Klien")
 
     tabC, tabD = st.tabs([
