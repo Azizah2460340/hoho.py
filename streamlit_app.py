@@ -444,8 +444,8 @@ if not st.session_state.authenticated:
     
         </div>
     
-    </div>
-""", unsafe_allow_html=True)
+        </div>
+    """, unsafe_allow_html=True)
     menu = st.radio(
         "",
         ["Masuk","Daftar"],
