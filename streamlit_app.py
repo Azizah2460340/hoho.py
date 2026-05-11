@@ -10,209 +10,188 @@ st.set_page_config(
     page_icon="🌴"
 )
 
-# ==================== CUSTOM CSS ====================
+# ==================== CSS ====================
 st.markdown("""
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 html, body, [class*="css"]{
-    font-family: 'Poppins', sans-serif;
+    font-family:'Poppins',sans-serif;
+}
+
+/* ================= ROOT COLOR ================= */
+:root{
+    --green-dark:#062b1f;
+    --green-main:#0f5132;
+    --green-soft:#1c7c54;
+
+    --gold:#d4a73d;
+    --gold-soft:#f4d27a;
+
+    --cream:#f7f3eb;
 }
 
 /* ================= BACKGROUND ================= */
 .stApp{
     background:
-    linear-gradient(
-        135deg,
-        #062f22 0%,
-        #0f5132 40%,
-        #176944 100%
-    );
+    radial-gradient(circle at top left,#1b5e45 0%,#062b1f 35%,#041b14 100%);
     color:white;
 }
 
 /* ================= SIDEBAR ================= */
 section[data-testid="stSidebar"]{
-    background: linear-gradient(
-        180deg,
-        #05281d 0%,
-        #0f5132 100%
-    );
-    border-right:2px solid rgba(255,255,255,0.1);
+    background:linear-gradient(
+    180deg,
+    #041b14 0%,
+    #0f5132 100%);
+    border-right:2px solid rgba(212,167,61,0.2);
 }
 
 section[data-testid="stSidebar"] *{
     color:white !important;
 }
 
-/* ================= HEADER ================= */
-.hero-box{
-    background:
-    linear-gradient(
-        135deg,
-        rgba(255,255,255,0.10),
-        rgba(255,255,255,0.05)
+/* ================= CARD ================= */
+.white-card{
+    background:linear-gradient(
+    145deg,
+    rgba(255,255,255,0.08),
+    rgba(255,255,255,0.03)
     );
 
-    border:1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
 
-    padding:2rem;
     border-radius:28px;
+    padding:2rem;
 
-    backdrop-filter: blur(12px);
+    border:1px solid rgba(212,167,61,0.25);
 
     box-shadow:
+    0 0 25px rgba(212,167,61,0.08),
     0 8px 30px rgba(0,0,0,0.25);
 
-    margin-bottom:1.5rem;
+    margin-bottom:1.2rem;
 }
 
-.hero-title{
+/* ================= TITLE ================= */
+.gold-title{
     font-size:3rem;
     font-weight:800;
     line-height:1.1;
-    color:white;
-}
 
-.hero-gold{
-    color:#f2c66d;
-}
-
-.hero-sub{
-    margin-top:10px;
-    color:#d9f5e5;
-    font-size:1rem;
-}
-
-/* ================= CARD ================= */
-.white-card{
-    background:
-    linear-gradient(
-        180deg,
-        rgba(255,255,255,0.96),
-        rgba(255,255,255,0.90)
+    background:linear-gradient(
+    180deg,
+    #ffe8a3,
+    #d4a73d
     );
 
-    border-radius:26px;
-
-    padding:1.5rem;
-
-    color:#133a2b;
-
-    box-shadow:
-    0 10px 25px rgba(0,0,0,0.15);
-
-    border:
-    1px solid rgba(255,255,255,0.3);
-
-    margin-bottom:1rem;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 }
 
-/* ================= METRIC ================= */
-.metric-box{
-    background:
-    linear-gradient(
-        135deg,
-        #fff7e7,
-        #fff1cf
-    );
-
-    border-radius:24px;
-
-    padding:1.4rem;
-
-    text-align:center;
-
-    box-shadow:
-    0 5px 18px rgba(0,0,0,0.12);
-
-    border:2px solid rgba(242,198,109,0.35);
-}
-
-.metric-value{
-    font-size:2.4rem;
-    font-weight:800;
-    color:#0f5132;
-}
-
-.metric-label{
-    color:#6b4b12;
-    font-weight:600;
+/* ================= SUBTITLE ================= */
+.subtitle{
+    color:#f5e6b7;
+    font-size:1.1rem;
+    margin-top:-10px;
 }
 
 /* ================= BUTTON ================= */
 .stButton button{
-    background:
-    linear-gradient(
-        135deg,
-        #c58d2a,
-        #f2c66d
-    ) !important;
+    background:linear-gradient(
+    135deg,
+    #d4a73d,
+    #b8860b
+    );
 
-    color:#143728 !important;
+    color:white;
+    border:none;
 
-    border:none !important;
+    border-radius:30px;
 
-    border-radius:18px !important;
+    padding:0.6rem 1.5rem;
 
-    font-weight:700 !important;
+    font-weight:700;
 
-    padding:0.6rem 1.2rem !important;
+    box-shadow:
+    0 4px 15px rgba(212,167,61,0.3);
 
     transition:0.3s;
 }
 
 .stButton button:hover{
-    transform:scale(1.03);
+    transform:translateY(-2px);
     box-shadow:
-    0 6px 18px rgba(242,198,109,0.4);
+    0 8px 20px rgba(212,167,61,0.4);
 }
 
 /* ================= TABS ================= */
-.stTabs [data-baseweb="tab-list"]{
-    gap:10px;
-}
-
 .stTabs [data-baseweb="tab"]{
-    background:
-    rgba(255,255,255,0.1);
-
+    background:rgba(255,255,255,0.06);
     color:white;
 
-    border-radius:18px;
-
+    border-radius:20px;
     padding:12px 24px;
 
-    font-weight:600;
+    margin-right:8px;
 }
 
 .stTabs [aria-selected="true"]{
-    background:
-    linear-gradient(
-        135deg,
-        #c58d2a,
-        #f2c66d
-    ) !important;
+    background:linear-gradient(
+    135deg,
+    #d4a73d,
+    #b8860b
+    );
 
-    color:#143728 !important;
+    color:white !important;
+}
+
+/* ================= METRIC ================= */
+.metric-box{
+    background:linear-gradient(
+    145deg,
+    rgba(255,255,255,0.08),
+    rgba(255,255,255,0.02)
+    );
+
+    border:1px solid rgba(212,167,61,0.25);
+
+    border-radius:24px;
+
+    padding:1.5rem;
+
+    text-align:center;
+
+    box-shadow:
+    0 5px 20px rgba(0,0,0,0.2);
+}
+
+.metric-value{
+    font-size:2.4rem;
+    font-weight:800;
+    color:#f4d27a;
+}
+
+/* ================= TABLE ================= */
+[data-testid="stDataFrame"]{
+    border-radius:20px;
+    overflow:hidden;
+}
+
+/* ================= FOOTER ================= */
+.footer{
+    text-align:center;
+    margin-top:3rem;
+    color:#d8c48a;
+    opacity:0.8;
 }
 
 /* ================= INPUT ================= */
 .stTextInput input,
 .stNumberInput input,
-.stTextArea textarea,
-.stSelectbox div[data-baseweb="select"]{
-    border-radius:16px !important;
-    border:2px solid #e9d3a1 !important;
-}
-
-/* ================= TABLE ================= */
-[data-testid="stDataFrame"]{
-    background:white;
-    border-radius:22px;
-    overflow:hidden;
-    padding:10px;
+textarea{
+    border-radius:18px !important;
 }
 
 /* ================= ALERT ================= */
@@ -220,31 +199,8 @@ section[data-testid="stSidebar"] *{
     border-radius:20px;
 }
 
-/* ================= FOOTER ================= */
-.footer{
-    text-align:center;
-    margin-top:2rem;
-    color:#d8f0df;
-    font-size:0.95rem;
-    padding-bottom:1rem;
-}
-
-/* ================= HIDE STREAMLIT ================= */
-#MainMenu{
-    visibility:hidden;
-}
-
-footer{
-    visibility:hidden;
-}
-
-header{
-    visibility:hidden;
-}
-
 </style>
 """, unsafe_allow_html=True)
-
 # ==================== DATABASE ====================
 def get_connection():
     return sqlite3.connect(
@@ -401,13 +357,51 @@ if "authenticated" not in st.session_state:
 # ==================== BELUM LOGIN ====================
 if not st.session_state.authenticated:
 
-    st.markdown("""
-    <div class="white-card">
-        <h1>🌴 OrderStock - CV Amal Mulia</h1>
-        <p>Manajemen Pesanan & Distribusi Stok</p>
-    </div>
-    """, unsafe_allow_html=True)
+st.markdown("""
+<div class="white-card">
 
+    <div style="display:flex;align-items:center;gap:20px;">
+
+        <div style="
+        width:90px;
+        height:90px;
+        border-radius:50%;
+        border:3px solid #d4a73d;
+
+        display:flex;
+        align-items:center;
+        justify-content:center;
+
+        font-size:2.2rem;
+
+        background:rgba(212,167,61,0.08);
+        ">
+        🌴
+        </div>
+
+        <div>
+            <div class="gold-title">
+            ORDERSTOCK
+            </div>
+
+            <div style="
+            font-size:2rem;
+            font-weight:800;
+            color:#f4d27a;
+            margin-top:-8px;
+            ">
+            CV AMAL MULIA
+            </div>
+
+            <div class="subtitle">
+            Sistem Distribusi & Manajemen Stok Premium
+            </div>
+        </div>
+
+    </div>
+
+</div>
+""", unsafe_allow_html=True)
     menu = st.radio(
         "",
         ["Masuk","Daftar"],
@@ -531,11 +525,47 @@ with st.sidebar:
 # ==================== HEADER ====================
 st.markdown(f"""
 <div class="white-card">
-    <h2>🏢 Selamat Datang, {username}</h2>
-    <p>{datetime.now().strftime('%A, %d %B %Y')}</p>
+
+    <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    ">
+
+        <div>
+            <div class="gold-title">
+            Selamat Datang
+            </div>
+
+            <div style="
+            font-size:2rem;
+            font-weight:700;
+            color:white;
+            ">
+            {username}
+            </div>
+
+            <div class="subtitle">
+            {datetime.now().strftime('%A, %d %B %Y')}
+            </div>
+        </div>
+
+        <div style="
+        background:linear-gradient(135deg,#d4a73d,#b8860b);
+        padding:18px 28px;
+        border-radius:24px;
+        color:white;
+        font-weight:700;
+        box-shadow:0 4px 20px rgba(212,167,61,0.3);
+        ">
+        🌴 PREMIUM DASHBOARD
+        </div>
+
+    </div>
+
 </div>
 """, unsafe_allow_html=True)
-
 # =========================================================
 # ==================== ROLE PABRIK ========================
 # =========================================================
@@ -992,6 +1022,6 @@ elif role == "distributor":
 # ==================== FOOTER ====================
 st.markdown("""
 <div class="footer">
-🌴 © 2026 CV Amal Mulia — Premium Distribution System
+🌴 © 2026 CV Amal Mulia — OrderStock
 </div>
-""", unsafe_allow_html=True)
+""", unsafe_allow_html=True)aku mau tampilannya sevibe mirip dengan gambar sari kurma diatas, ganti yang bagian mana
