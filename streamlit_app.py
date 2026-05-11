@@ -1024,4 +1024,4 @@ st.markdown("""
 <div class="footer">
 🌴 © 2026 CV Amal Mulia — OrderStock
 </div>
-""", unsafe_allow_html=True)aku mau tampilannya sevibe mirip dengan gambar sari kurma diatas, ganti yang bagian mana
+""", unsafe_allow_html=True)
