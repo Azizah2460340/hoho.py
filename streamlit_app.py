@@ -3,14 +3,14 @@ import pandas as pd
 import sqlite3
 from datetime import datetime
 
-# ==================== PAGE CONFIG ====================
+# ================= PAGE CONFIG =================
 st.set_page_config(
     page_title="OrderStock - CV Amal Mulia",
     layout="wide",
     page_icon="🌴"
 )
 
-# ==================== CSS ====================
+# ================= CSS =================
 st.markdown("""
 <style>
 
@@ -69,27 +69,20 @@ section[data-testid="stSidebar"] *{
 
     box-shadow:
     0 10px 30px rgba(0,0,0,0.18);
-
-    backdrop-filter: blur(8px);
-}
-
-/* ================= GOLD TITLE ================= */
-
-.white-card h1,
-.white-card h2{
-
-    color:#f4c76b !important;
-
-    font-weight:800;
 }
 
 /* ================= TEXT ================= */
 
-.white-card p,
-.white-card div,
-.white-card span,
-.white-card label{
+h1,h2,h3,h4,h5,h6,
+p,label,span,div{
     color:white !important;
+}
+
+/* ================= GOLD TITLE ================= */
+
+.gold-title{
+    color:#f4c76b !important;
+    font-weight:800;
 }
 
 /* ================= BUTTON ================= */
@@ -124,6 +117,13 @@ section[data-testid="stSidebar"] *{
     0 8px 18px rgba(244,199,107,0.4);
 }
 
+/* ================= RADIO ================= */
+
+.stRadio label{
+    color:white !important;
+    font-weight:600;
+}
+
 /* ================= TABS ================= */
 
 .stTabs [data-baseweb="tab"]{
@@ -135,7 +135,7 @@ section[data-testid="stSidebar"] *{
 
     padding:10px 20px;
 
-    color:white;
+    color:white !important;
 
     font-weight:600;
 }
@@ -182,10 +182,23 @@ section[data-testid="stSidebar"] *{
 
     font-weight:800;
 
-    color:#0d4d33;
+    color:#0d4d33 !important;
+}
+
+.metric-label{
+    color:#6f4f12 !important;
+    font-weight:700;
 }
 
 /* ================= INPUT ================= */
+
+.stTextInput label,
+.stNumberInput label,
+.stTextArea label,
+.stSelectbox label{
+    color:#f4c76b !important;
+    font-weight:600;
+}
 
 .stTextInput input,
 .stNumberInput input,
@@ -196,6 +209,10 @@ section[data-testid="stSidebar"] *{
 
     border:
     2px solid #ecd7ab !important;
+
+    color:#17382c !important;
+
+    font-weight:500;
 }
 
 /* ================= TABLE ================= */
@@ -207,6 +224,16 @@ section[data-testid="stSidebar"] *{
     border-radius:20px;
 
     padding:10px;
+}
+
+[data-testid="stDataFrame"] *{
+    color:#17382c !important;
+}
+
+/* ================= ALERT ================= */
+
+.stAlert{
+    border-radius:20px;
 }
 
 /* ================= FOOTER ================= */
@@ -237,7 +264,8 @@ header{
 </style>
 """, unsafe_allow_html=True)
 
-# ==================== DATABASE ====================
+# ================= DATABASE =================
+
 def get_connection():
     return sqlite3.connect(
         "makloon.db",
@@ -386,22 +414,26 @@ def get_df(query, params=()):
 
 init_db()
 
-# ==================== LOGIN ====================
+# ================= LOGIN =================
+
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
-# ==================== BELUM LOGIN ====================
+# ================= BELUM LOGIN =================
+
 if not st.session_state.authenticated:
 
     st.markdown("""
     <div class="white-card">
-        <h1 style="color:#f4c76b;">
+
+        <h1 class="gold-title">
         🌴 OrderStock - CV Amal Mulia Sejahtera
         </h1>
 
         <p>
         Manajemen Pesanan & Distribusi Stok Premium
         </p>
+
     </div>
     """, unsafe_allow_html=True)
 
@@ -510,14 +542,19 @@ if not st.session_state.authenticated:
 
     st.stop()
 
-# ==================== SESSION ====================
+# ================= SESSION =================
+
 role = st.session_state.role
 username = st.session_state.username
 
-# ==================== SIDEBAR ====================
+# ================= SIDEBAR =================
+
 with st.sidebar:
 
-    st.markdown(f"## 👤 {username}")
+    st.markdown(f"""
+    ## 👤 {username}
+    """)
+
     st.markdown("---")
 
     if st.button("🚪 Logout"):
@@ -525,11 +562,12 @@ with st.sidebar:
         st.session_state.authenticated = False
         st.rerun()
 
-# ==================== HEADER ====================
+# ================= HEADER =================
+
 st.markdown(f"""
 <div class="white-card">
 
-    <h2 style="color:#f4c76b;">
+    <h2 class="gold-title">
     🏢 Selamat Datang, {username}
     </h2>
 
@@ -540,4 +578,85 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# LANJUTKAN CODE KAMU YANG BAWAH TANPA DIUBAH SAMA SEKALI
+# =========================================================
+# ================= ROLE PABRIK ===========================
+# =========================================================
+
+if role == "pabrik":
+
+    total_stok = get_df("""
+    SELECT SUM(stok) as total
+    FROM produk
+    """).iloc[0]["total"] or 0
+
+    total_order = get_df("""
+    SELECT COUNT(*) as total
+    FROM pesanan
+    WHERE status='Menunggu Konfirmasi'
+    """).iloc[0]["total"] or 0
+
+    selesai = get_df("""
+    SELECT COUNT(*) as total
+    FROM pesanan
+    WHERE status='Selesai'
+    """).iloc[0]["total"] or 0
+
+    col1,col2,col3 = st.columns(3)
+
+    with col1:
+        st.markdown(f"""
+        <div class="metric-box">
+            <div class="metric-value">{total_stok}</div>
+            <div class="metric-label">Total Stok Pabrik</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown(f"""
+        <div class="metric-box">
+            <div class="metric-value">{total_order}</div>
+            <div class="metric-label">Pesanan Pending</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col3:
+        st.markdown(f"""
+        <div class="metric-box">
+            <div class="metric-value">{selesai}</div>
+            <div class="metric-label">Pesanan Selesai</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    tab1,tab2,tab3,tab4,tab5 = st.tabs([
+        "📦 Stok Pabrik",
+        "➕ Tambah Produk",
+        "🛒 Order Masuk",
+        "✅ Konfirmasi",
+        "📊 Semua Stok Distributor"
+    ])
+
+    # ================= TAB 1 =================
+    with tab1:
+
+        df_produk = get_df("""
+        SELECT nama,stok,stok_minimum,harga_jual
+        FROM produk
+        """)
+
+        df_produk["harga_jual"] = df_produk["harga_jual"].apply(
+            lambda x: f"Rp {x:,.0f}".replace(",", ".")
+        )
+
+        st.dataframe(
+            df_produk,
+            use_container_width=True,
+            hide_index=True
+        )
+
+# ================= FOOTER =================
+
+st.markdown("""
+<div class="footer">
+🌴 © 2026 CV Amal Mulia — OrderStock
+</div>
+""", unsafe_allow_html=True)
