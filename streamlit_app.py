@@ -3,22 +3,21 @@ import pandas as pd
 import sqlite3
 from datetime import datetime
 
-# ================= PAGE CONFIG =================
+# ==================== PAGE CONFIG ====================
 st.set_page_config(
     page_title="OrderStock - CV Amal Mulia",
     layout="wide",
-    page_icon="🌴",
-    initial_sidebar_state="expanded"
+    page_icon="🌴"
 )
 
-# ================= CSS =================
+# ==================== CSS ====================
 st.markdown("""
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 html, body, [class*="css"]{
-    font-family: 'Poppins', sans-serif;
+    font-family:'Poppins', sans-serif;
 }
 
 /* ================= BACKGROUND ================= */
@@ -27,73 +26,25 @@ html, body, [class*="css"]{
     background:
     linear-gradient(
         135deg,
-        #04281c 0%,
+        #052e21 0%,
         #0b5136 45%,
-        #166845 100%
+        #176b46 100%
     );
-    color:white;
 }
 
 /* ================= SIDEBAR ================= */
 
 section[data-testid="stSidebar"]{
-
     background:
     linear-gradient(
         180deg,
         #031d15 0%,
-        #0d4b32 100%
+        #0d4d33 100%
     );
-
-    border-right:
-    1px solid rgba(255,255,255,0.08);
 }
 
 section[data-testid="stSidebar"] *{
     color:white !important;
-}
-
-/* ================= HERO ================= */
-
-.hero-box{
-
-    background:
-    linear-gradient(
-        135deg,
-        rgba(255,255,255,0.10),
-        rgba(255,255,255,0.03)
-    );
-
-    border:
-    1px solid rgba(255,255,255,0.08);
-
-    padding:2rem;
-
-    border-radius:30px;
-
-    backdrop-filter: blur(10px);
-
-    box-shadow:
-    0 10px 30px rgba(0,0,0,0.25);
-
-    margin-bottom:1.5rem;
-}
-
-.hero-title{
-    font-size:3rem;
-    font-weight:800;
-    line-height:1.1;
-    color:white;
-}
-
-.hero-gold{
-    color:#f4c76b;
-}
-
-.hero-sub{
-    margin-top:10px;
-    color:#d7f5e2;
-    font-size:1rem;
 }
 
 /* ================= CARD ================= */
@@ -103,65 +54,42 @@ section[data-testid="stSidebar"] *{
     background:
     linear-gradient(
         135deg,
-        rgba(10,45,32,0.95),
-        rgba(18,79,53,0.92)
+        rgba(10,45,32,0.96),
+        rgba(18,79,53,0.93)
     );
 
     border-radius:28px;
 
     padding:1.5rem;
 
-    color:#f4c76b;
-
-    box-shadow:
-    0 8px 25px rgba(0,0,0,0.20);
-
     margin-bottom:1rem;
 
     border:
-    1px solid rgba(244,199,107,0.15);
+    1px solid rgba(244,199,107,0.2);
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.18);
+
+    backdrop-filter: blur(8px);
+}
+
+/* ================= GOLD TITLE ================= */
+
+.white-card h1,
+.white-card h2{
+
+    color:#f4c76b !important;
+
+    font-weight:800;
 }
 
 /* ================= TEXT ================= */
 
-h1,h2,h3,h4,h5,h6,
-p,label,span,div{
+.white-card p,
+.white-card div,
+.white-card span,
+.white-card label{
     color:white !important;
-}
-
-/* ================= METRIC ================= */
-
-.metric-box{
-
-    background:
-    linear-gradient(
-        135deg,
-        #fff7e4,
-        #ffe2a8
-    );
-
-    border-radius:25px;
-
-    padding:1.5rem;
-
-    text-align:center;
-
-    box-shadow:
-    0 8px 20px rgba(0,0,0,0.15);
-
-    border:
-    2px solid rgba(244,199,107,0.4);
-}
-
-.metric-value{
-    font-size:2.5rem;
-    font-weight:800;
-    color:#0d4b32 !important;
-}
-
-.metric-label{
-    color:#7a5712 !important;
-    font-weight:700;
 }
 
 /* ================= BUTTON ================= */
@@ -184,8 +112,6 @@ p,label,span,div{
 
     font-weight:700 !important;
 
-    padding:0.7rem 1.3rem !important;
-
     transition:0.3s;
 }
 
@@ -200,20 +126,16 @@ p,label,span,div{
 
 /* ================= TABS ================= */
 
-.stTabs [data-baseweb="tab-list"]{
-    gap:10px;
-}
-
 .stTabs [data-baseweb="tab"]{
 
     background:
     rgba(255,255,255,0.08);
 
-    color:white !important;
-
     border-radius:20px;
 
-    padding:12px 22px;
+    padding:10px 20px;
+
+    color:white;
 
     font-weight:600;
 }
@@ -230,6 +152,39 @@ p,label,span,div{
     color:#17382c !important;
 }
 
+/* ================= METRIC ================= */
+
+.metric-box{
+
+    background:
+    linear-gradient(
+        135deg,
+        #fff8e7,
+        #ffe2a8
+    );
+
+    border-radius:24px;
+
+    padding:1.2rem;
+
+    text-align:center;
+
+    border:
+    2px solid rgba(244,199,107,0.35);
+
+    box-shadow:
+    0 8px 18px rgba(0,0,0,0.12);
+}
+
+.metric-value{
+
+    font-size:2.2rem;
+
+    font-weight:800;
+
+    color:#0d4d33;
+}
+
 /* ================= INPUT ================= */
 
 .stTextInput input,
@@ -237,24 +192,10 @@ p,label,span,div{
 .stTextArea textarea,
 .stSelectbox div[data-baseweb="select"]{
 
-    border-radius:18px !important;
+    border-radius:16px !important;
 
     border:
     2px solid #ecd7ab !important;
-
-    color:#17382c !important;
-
-    font-weight:500;
-}
-
-/* LABEL */
-
-.stTextInput label,
-.stNumberInput label,
-.stTextArea label,
-.stSelectbox label{
-    color:#f4c76b !important;
-    font-weight:600;
 }
 
 /* ================= TABLE ================= */
@@ -263,28 +204,20 @@ p,label,span,div{
 
     background:white;
 
-    border-radius:22px;
+    border-radius:20px;
 
     padding:10px;
-}
-
-[data-testid="stDataFrame"] *{
-    color:#17382c !important;
-}
-
-/* ================= ALERT ================= */
-
-.stAlert{
-    border-radius:20px;
 }
 
 /* ================= FOOTER ================= */
 
 .footer{
+
     text-align:center;
+
     margin-top:2rem;
+
     color:#d9f2e3;
-    padding-bottom:1rem;
 }
 
 /* ================= HIDE STREAMLIT ================= */
@@ -304,8 +237,7 @@ header{
 </style>
 """, unsafe_allow_html=True)
 
-# ================= DATABASE =================
-
+# ==================== DATABASE ====================
 def get_connection():
     return sqlite3.connect(
         "makloon.db",
@@ -318,15 +250,42 @@ def init_db():
 
         c = conn.cursor()
 
+        # ===== PRODUK =====
         c.execute("""
         CREATE TABLE IF NOT EXISTS produk(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nama TEXT UNIQUE,
             stok INTEGER,
+            stok_minimum INTEGER,
             harga_jual INTEGER
         )
         """)
 
+        # ===== PESANAN =====
+        c.execute("""
+        CREATE TABLE IF NOT EXISTS pesanan(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            klien TEXT,
+            produk TEXT,
+            jumlah INTEGER,
+            status TEXT,
+            tanggal_masuk TEXT,
+            jenis_pesanan TEXT,
+            created_by TEXT
+        )
+        """)
+
+        # ===== STOK DISTRIBUTOR =====
+        c.execute("""
+        CREATE TABLE IF NOT EXISTS stok_distributor(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            distributor TEXT,
+            produk TEXT,
+            stok INTEGER
+        )
+        """)
+
+        # ===== USERS =====
         c.execute("""
         CREATE TABLE IF NOT EXISTS users(
             username TEXT PRIMARY KEY,
@@ -335,17 +294,7 @@ def init_db():
         )
         """)
 
-        c.execute("""
-        CREATE TABLE IF NOT EXISTS pesanan(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            produk TEXT,
-            jumlah INTEGER,
-            status TEXT,
-            created_by TEXT,
-            tanggal TEXT
-        )
-        """)
-
+        # ===== DEFAULT USER =====
         c.execute("SELECT COUNT(*) FROM users")
 
         if c.fetchone()[0] == 0:
@@ -353,6 +302,8 @@ def init_db():
             users = [
                 ("pabrik","pabrik123","pabrik"),
                 ("distributor1","dist123","distributor"),
+                ("distributor2","dist123","distributor"),
+                ("distributor3","dist123","distributor"),
                 ("klien1","klien123","klien")
             ]
 
@@ -361,22 +312,57 @@ def init_db():
                 users
             )
 
+        # ===== DEFAULT PRODUK =====
         c.execute("SELECT COUNT(*) FROM produk")
 
         if c.fetchone()[0] == 0:
 
             produk = [
-                ("Sari Kurma Premium",500,35000),
-                ("Sari Kurma Herbal",300,40000),
-                ("Sari Kurma Lambung",250,45000),
-                ("Sari Kurma Al-Jazira",600,30000)
+                ("Sari Kurma Premium",500,50,35000),
+                ("Sari Kurma Herbal Obat Batuk",300,50,40000),
+                ("Sari Kurma Lambung",250,50,45000),
+                ("Sari Kurma Al-Jazira",600,50,30000)
             ]
 
             c.executemany("""
             INSERT INTO produk
-            (nama,stok,harga_jual)
-            VALUES (?,?,?)
+            (nama,stok,stok_minimum,harga_jual)
+            VALUES (?,?,?,?)
             """, produk)
+
+        # ===== AUTO BUAT STOK DISTRIBUTOR =====
+        distributors = pd.read_sql_query("""
+        SELECT username
+        FROM users
+        WHERE role='distributor'
+        """, conn)
+
+        products = pd.read_sql_query("""
+        SELECT nama
+        FROM produk
+        """, conn)
+
+        for _, d in distributors.iterrows():
+
+            for _, p in products.iterrows():
+
+                cek = pd.read_sql_query("""
+                SELECT *
+                FROM stok_distributor
+                WHERE distributor=? AND produk=?
+                """, conn, params=(d["username"], p["nama"]))
+
+                if cek.empty:
+
+                    c.execute("""
+                    INSERT INTO stok_distributor
+                    (distributor,produk,stok)
+                    VALUES (?,?,?)
+                    """, (
+                        d["username"],
+                        p["nama"],
+                        0
+                    ))
 
         conn.commit()
 
@@ -385,9 +371,7 @@ def run_query(query, params=()):
     with get_connection() as conn:
 
         c = conn.cursor()
-
         c.execute(query, params)
-
         conn.commit()
 
 def get_df(query, params=()):
@@ -402,29 +386,22 @@ def get_df(query, params=()):
 
 init_db()
 
-# ================= SESSION =================
-
+# ==================== LOGIN ====================
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
-# =========================================================
-# ================= LOGIN PAGE ============================
-# =========================================================
-
+# ==================== BELUM LOGIN ====================
 if not st.session_state.authenticated:
 
     st.markdown("""
-    <div class="hero-box">
+    <div class="white-card">
+        <h1 style="color:#f4c76b;">
+        🌴 OrderStock - CV Amal Mulia Sejahtera
+        </h1>
 
-    <div class="hero-title">
-    ORDERSTOCK
-    <span class="hero-gold">CV AMAL MULIA</span>
-    </div>
-
-    <div class="hero-sub">
-    Sistem Distribusi & Manajemen Pesanan Premium
-    </div>
-
+        <p>
+        Manajemen Pesanan & Distribusi Stok Premium
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -434,16 +411,11 @@ if not st.session_state.authenticated:
         horizontal=True
     )
 
-    c1,c2,c3 = st.columns([1,2,1])
+    col1,col2,col3 = st.columns([1,2,1])
 
-    with c2:
+    with col2:
 
-        st.markdown("""
-        <div class="white-card">
-        """, unsafe_allow_html=True)
-
-        # ================= LOGIN =================
-
+        # ===== LOGIN =====
         if menu == "Masuk":
 
             with st.form("login"):
@@ -477,8 +449,7 @@ if not st.session_state.authenticated:
                     else:
                         st.error("Username/password salah")
 
-        # ================= REGISTER =================
-
+        # ===== REGISTER =====
         else:
 
             with st.form("register"):
@@ -493,7 +464,7 @@ if not st.session_state.authenticated:
                 )
 
                 role = st.selectbox(
-                    "Daftar Sebagai",
+                    "Daftar sebagai",
                     ["distributor","klien"]
                 )
 
@@ -506,42 +477,47 @@ if not st.session_state.authenticated:
                         (new_u,)
                     )
 
-                    if cek.empty():
+                    if cek.empty:
 
                         run_query(
                             "INSERT INTO users VALUES (?,?,?)",
                             (new_u,new_p,role)
                         )
 
+                        if role == "distributor":
+
+                            produk_list = get_df("""
+                            SELECT nama
+                            FROM produk
+                            """)
+
+                            for _, row in produk_list.iterrows():
+
+                                run_query("""
+                                INSERT INTO stok_distributor
+                                (distributor,produk,stok)
+                                VALUES (?,?,?)
+                                """,(
+                                    new_u,
+                                    row["nama"],
+                                    0
+                                ))
+
                         st.success("Akun berhasil dibuat")
 
                     else:
                         st.error("Username sudah ada")
 
-        st.markdown("</div>", unsafe_allow_html=True)
-
     st.stop()
 
-# =========================================================
-# ================= SESSION USER ==========================
-# =========================================================
-
+# ==================== SESSION ====================
 role = st.session_state.role
 username = st.session_state.username
 
-# ================= SIDEBAR =================
-
+# ==================== SIDEBAR ====================
 with st.sidebar:
 
-    st.markdown(f"""
-    # 🌴 OrderStock
-
-    ### 👤 {username}
-
-    Role :
-    **{role.upper()}**
-    """)
-
+    st.markdown(f"## 👤 {username}")
     st.markdown("---")
 
     if st.button("🚪 Logout"):
@@ -549,248 +525,19 @@ with st.sidebar:
         st.session_state.authenticated = False
         st.rerun()
 
-# ================= HEADER =================
-
+# ==================== HEADER ====================
 st.markdown(f"""
-<div class="hero-box">
+<div class="white-card">
 
-<div class="hero-title">
-DASHBOARD
-<span class="hero-gold">{role.upper()}</span>
-</div>
+    <h2 style="color:#f4c76b;">
+    🏢 Selamat Datang, {username}
+    </h2>
 
-<div class="hero-sub">
-{datetime.now().strftime('%A, %d %B %Y')}
-</div>
+    <p>
+    {datetime.now().strftime('%A, %d %B %Y')}
+    </p>
 
-</div>
-""", unsafe_allow_html=True)
-
-# =========================================================
-# ================= ROLE PABRIK ===========================
-# =========================================================
-
-if role == "pabrik":
-
-    total_stok = get_df("""
-    SELECT SUM(stok) as total
-    FROM produk
-    """).iloc[0]["total"]
-
-    total_order = get_df("""
-    SELECT COUNT(*) as total
-    FROM pesanan
-    """).iloc[0]["total"]
-
-    col1,col2 = st.columns(2)
-
-    with col1:
-
-        st.markdown(f"""
-        <div class="metric-box">
-            <div class="metric-value">
-            {total_stok}
-            </div>
-
-            <div class="metric-label">
-            Total Stok
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-
-        st.markdown(f"""
-        <div class="metric-box">
-            <div class="metric-value">
-            {total_order}
-            </div>
-
-            <div class="metric-label">
-            Total Pesanan
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.write("")
-
-    tab1,tab2 = st.tabs([
-        "📦 Produk",
-        "🛒 Pesanan"
-    ])
-
-    # ================= TAB PRODUK =================
-
-    with tab1:
-
-        st.markdown("""
-        <div class="white-card">
-        <h3>📦 Data Produk</h3>
-        </div>
-        """, unsafe_allow_html=True)
-
-        df_produk = get_df("""
-        SELECT nama,stok,harga_jual
-        FROM produk
-        """)
-
-        df_produk["harga_jual"] = df_produk["harga_jual"].apply(
-            lambda x: f"Rp {x:,.0f}".replace(",", ".")
-        )
-
-        st.dataframe(
-            df_produk,
-            use_container_width=True,
-            hide_index=True
-        )
-
-    # ================= TAB PESANAN =================
-
-    with tab2:
-
-        st.markdown("""
-        <div class="white-card">
-        <h3>🛒 Data Pesanan</h3>
-        </div>
-        """, unsafe_allow_html=True)
-
-        df_order = get_df("""
-        SELECT *
-        FROM pesanan
-        """)
-
-        st.dataframe(
-            df_order,
-            use_container_width=True,
-            hide_index=True
-        )
-
-# =========================================================
-# ================= ROLE DISTRIBUTOR ======================
-# =========================================================
-
-elif role == "distributor":
-
-    tab1,tab2 = st.tabs([
-        "📦 Produk",
-        "🛒 Order"
-    ])
-
-    with tab1:
-
-        st.markdown("""
-        <div class="white-card">
-        <h3>📦 Produk Tersedia</h3>
-        </div>
-        """, unsafe_allow_html=True)
-
-        df = get_df("""
-        SELECT nama,stok,harga_jual
-        FROM produk
-        """)
-
-        df["harga_jual"] = df["harga_jual"].apply(
-            lambda x: f"Rp {x:,.0f}".replace(",", ".")
-        )
-
-        st.dataframe(
-            df,
-            use_container_width=True,
-            hide_index=True
-        )
-
-    with tab2:
-
-        st.markdown("""
-        <div class="white-card">
-        <h3>🛒 Order Produk</h3>
-        </div>
-        """, unsafe_allow_html=True)
-
-        with st.form("order_produk"):
-
-            produk = st.selectbox(
-                "Pilih Produk",
-                get_df(
-                    "SELECT nama FROM produk"
-                )["nama"]
-            )
-
-            jumlah = st.number_input(
-                "Jumlah",
-                min_value=1
-            )
-
-            submit = st.form_submit_button(
-                "Kirim Order"
-            )
-
-            if submit:
-
-                run_query("""
-                INSERT INTO pesanan
-                (produk,jumlah,status,created_by,tanggal)
-
-                VALUES (?,?,?,?,?)
-                """,(
-                    produk,
-                    jumlah,
-                    "Menunggu",
-                    username,
-                    datetime.now().strftime("%Y-%m-%d %H:%M")
-                ))
-
-                st.success("Order berhasil dikirim")
-                st.rerun()
-
-# =========================================================
-# ================= ROLE KLIEN ============================
-# =========================================================
-
-elif role == "klien":
-
-    st.markdown("""
-    <div class="white-card">
-    <h3>🏭 Form Makloon</h3>
-    </div>
-    """, unsafe_allow_html=True)
-
-    with st.form("makloon"):
-
-        produk = st.text_input(
-            "Nama Produk"
-        )
-
-        jumlah = st.number_input(
-            "Jumlah Produksi",
-            min_value=1
-        )
-
-        submit = st.form_submit_button(
-            "Kirim Pesanan"
-        )
-
-        if submit:
-
-            run_query("""
-            INSERT INTO pesanan
-            (produk,jumlah,status,created_by,tanggal)
-
-            VALUES (?,?,?,?,?)
-            """,(
-                produk,
-                jumlah,
-                "Menunggu",
-                username,
-                datetime.now().strftime("%Y-%m-%d %H:%M")
-            ))
-
-            st.success("Pesanan berhasil dikirim")
-
-# ================= FOOTER =================
-
-st.markdown("""
-<div class="footer">
-🌴 © 2026 CV Amal Mulia — Premium Distribution System
 </div>
 """, unsafe_allow_html=True)
+
+# LANJUTKAN CODE KAMU YANG BAWAH TANPA DIUBAH SAMA SEKALI
