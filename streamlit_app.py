@@ -10,193 +10,237 @@ st.set_page_config(
     page_icon="🌴"
 )
 
-# ==================== CSS ====================
+
+# ==================== CUSTOM CSS ====================
 st.markdown("""
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 html, body, [class*="css"]{
-    font-family:'Poppins',sans-serif;
-}
-
-/* ================= ROOT COLOR ================= */
-:root{
-    --green-dark:#062b1f;
-    --green-main:#0f5132;
-    --green-soft:#1c7c54;
-
-    --gold:#d4a73d;
-    --gold-soft:#f4d27a;
-
-    --cream:#f7f3eb;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* ================= BACKGROUND ================= */
 .stApp{
     background:
-    radial-gradient(circle at top left,#1b5e45 0%,#062b1f 35%,#041b14 100%);
+    linear-gradient(
+        135deg,
+        #062f22 0%,
+        #0f5132 40%,
+        #176944 100%
+    );
     color:white;
 }
 
 /* ================= SIDEBAR ================= */
 section[data-testid="stSidebar"]{
-    background:linear-gradient(
-    180deg,
-    #041b14 0%,
-    #0f5132 100%);
-    border-right:2px solid rgba(212,167,61,0.2);
+    background: linear-gradient(
+        180deg,
+        #05281d 0%,
+        #0f5132 100%
+    );
+    border-right:2px solid rgba(255,255,255,0.1);
 }
 
 section[data-testid="stSidebar"] *{
     color:white !important;
 }
 
-/* ================= CARD ================= */
-.white-card{
-    background:linear-gradient(
-    145deg,
-    rgba(255,255,255,0.08),
-    rgba(255,255,255,0.03)
+/* ================= HEADER ================= */
+.hero-box{
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,255,255,0.10),
+        rgba(255,255,255,0.05)
     );
 
-    backdrop-filter: blur(10px);
+    border:1px solid rgba(255,255,255,0.12);
 
-    border-radius:28px;
     padding:2rem;
+    border-radius:28px;
 
-    border:1px solid rgba(212,167,61,0.25);
+    backdrop-filter: blur(12px);
 
     box-shadow:
-    0 0 25px rgba(212,167,61,0.08),
     0 8px 30px rgba(0,0,0,0.25);
 
-    margin-bottom:1.2rem;
+    margin-bottom:1.5rem;
 }
 
-/* ================= TITLE ================= */
-.gold-title{
+.hero-title{
     font-size:3rem;
     font-weight:800;
     line-height:1.1;
-
-    background:linear-gradient(
-    180deg,
-    #ffe8a3,
-    #d4a73d
-    );
-
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-
-/* ================= SUBTITLE ================= */
-.subtitle{
-    color:#f5e6b7;
-    font-size:1.1rem;
-    margin-top:-10px;
-}
-
-/* ================= BUTTON ================= */
-.stButton button{
-    background:linear-gradient(
-    135deg,
-    #d4a73d,
-    #b8860b
-    );
-
     color:white;
-    border:none;
+}
 
-    border-radius:30px;
+.hero-gold{
+    color:#f2c66d;
+}
 
-    padding:0.6rem 1.5rem;
+.hero-sub{
+    margin-top:10px;
+    color:#d9f5e5;
+    font-size:1rem;
+}
 
-    font-weight:700;
+/* ================= CARD ================= */
+.white-card{
+    background:
+    linear-gradient(
+        180deg,
+        rgba(255,255,255,0.96),
+        rgba(255,255,255,0.90)
+    );
+
+    border-radius:26px;
+
+    padding:1.5rem;
+
+    color:#133a2b;
 
     box-shadow:
-    0 4px 15px rgba(212,167,61,0.3);
+    0 10px 25px rgba(0,0,0,0.15);
 
-    transition:0.3s;
-}
+    border:
+    1px solid rgba(255,255,255,0.3);
 
-.stButton button:hover{
-    transform:translateY(-2px);
-    box-shadow:
-    0 8px 20px rgba(212,167,61,0.4);
-}
-
-/* ================= TABS ================= */
-.stTabs [data-baseweb="tab"]{
-    background:rgba(255,255,255,0.06);
-    color:white;
-
-    border-radius:20px;
-    padding:12px 24px;
-
-    margin-right:8px;
-}
-
-.stTabs [aria-selected="true"]{
-    background:linear-gradient(
-    135deg,
-    #d4a73d,
-    #b8860b
-    );
-
-    color:white !important;
+    margin-bottom:1rem;
 }
 
 /* ================= METRIC ================= */
 .metric-box{
-    background:linear-gradient(
-    145deg,
-    rgba(255,255,255,0.08),
-    rgba(255,255,255,0.02)
+    background:
+    linear-gradient(
+        135deg,
+        #fff7e7,
+        #fff1cf
     );
-
-    border:1px solid rgba(212,167,61,0.25);
 
     border-radius:24px;
 
-    padding:1.5rem;
+    padding:1.4rem;
 
     text-align:center;
 
     box-shadow:
-    0 5px 20px rgba(0,0,0,0.2);
+    0 5px 18px rgba(0,0,0,0.12);
+
+    border:2px solid rgba(242,198,109,0.35);
 }
 
 .metric-value{
     font-size:2.4rem;
     font-weight:800;
-    color:#f4d27a;
+    color:#0f5132;
 }
 
-/* ================= TABLE ================= */
-[data-testid="stDataFrame"]{
-    border-radius:20px;
-    overflow:hidden;
+.metric-label{
+    color:#6b4b12;
+    font-weight:600;
 }
 
-/* ================= FOOTER ================= */
-.footer{
-    text-align:center;
-    margin-top:3rem;
-    color:#d8c48a;
-    opacity:0.8;
+/* ================= BUTTON ================= */
+.stButton button{
+    background:
+    linear-gradient(
+        135deg,
+        #c58d2a,
+        #f2c66d
+    ) !important;
+
+    color:#143728 !important;
+
+    border:none !important;
+
+    border-radius:18px !important;
+
+    font-weight:700 !important;
+
+    padding:0.6rem 1.2rem !important;
+
+    transition:0.3s;
+}
+
+.stButton button:hover{
+    transform:scale(1.03);
+    box-shadow:
+    0 6px 18px rgba(242,198,109,0.4);
+}
+
+/* ================= TABS ================= */
+.stTabs [data-baseweb="tab-list"]{
+    gap:10px;
+}
+
+.stTabs [data-baseweb="tab"]{
+    background:
+    rgba(255,255,255,0.1);
+
+    color:white;
+
+    border-radius:18px;
+
+    padding:12px 24px;
+
+    font-weight:600;
+}
+
+.stTabs [aria-selected="true"]{
+    background:
+    linear-gradient(
+        135deg,
+        #c58d2a,
+        #f2c66d
+    ) !important;
+
+    color:#143728 !important;
 }
 
 /* ================= INPUT ================= */
 .stTextInput input,
 .stNumberInput input,
-textarea{
-    border-radius:18px !important;
+.stTextArea textarea,
+.stSelectbox div[data-baseweb="select"]{
+    border-radius:16px !important;
+    border:2px solid #e9d3a1 !important;
+}
+
+/* ================= TABLE ================= */
+[data-testid="stDataFrame"]{
+    background:white;
+    border-radius:22px;
+    overflow:hidden;
+    padding:10px;
 }
 
 /* ================= ALERT ================= */
 .stAlert{
     border-radius:20px;
+}
+
+/* ================= FOOTER ================= */
+.footer{
+    text-align:center;
+    margin-top:2rem;
+    color:#d8f0df;
+    font-size:0.95rem;
+    padding-bottom:1rem;
+}
+
+/* ================= HIDE STREAMLIT ================= */
+#MainMenu{
+    visibility:hidden;
+}
+
+footer{
+    visibility:hidden;
+}
+
+header{
+    visibility:hidden;
 }
 
 </style>
