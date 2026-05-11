@@ -357,50 +357,50 @@ if "authenticated" not in st.session_state:
 # ==================== BELUM LOGIN ====================
 if not st.session_state.authenticated:
 
-st.markdown("""
-<div class="white-card">
-
-    <div style="display:flex;align-items:center;gap:20px;">
-
-        <div style="
-        width:90px;
-        height:90px;
-        border-radius:50%;
-        border:3px solid #d4a73d;
-
-        display:flex;
-        align-items:center;
-        justify-content:center;
-
-        font-size:2.2rem;
-
-        background:rgba(212,167,61,0.08);
-        ">
-        🌴
-        </div>
-
-        <div>
-            <div class="gold-title">
-            ORDERSTOCK
-            </div>
-
+    st.markdown("""
+    <div class="white-card">
+    
+        <div style="display:flex;align-items:center;gap:20px;">
+    
             <div style="
-            font-size:2rem;
-            font-weight:800;
-            color:#f4d27a;
-            margin-top:-8px;
+            width:90px;
+            height:90px;
+            border-radius:50%;
+            border:3px solid #d4a73d;
+    
+            display:flex;
+            align-items:center;
+            justify-content:center;
+    
+            font-size:2.2rem;
+    
+            background:rgba(212,167,61,0.08);
             ">
-            CV AMAL MULIA
+            🌴
             </div>
-
-            <div class="subtitle">
-            Sistem Distribusi & Manajemen Stok Premium
+    
+            <div>
+                <div class="gold-title">
+                ORDERSTOCK
+                </div>
+    
+                <div style="
+                font-size:2rem;
+                font-weight:800;
+                color:#f4d27a;
+                margin-top:-8px;
+                ">
+                CV AMAL MULIA
+                </div>
+    
+                <div class="subtitle">
+                Sistem Distribusi & Manajemen Stok Premium
+                </div>
             </div>
+    
         </div>
-
+    
     </div>
-
-</div>
 """, unsafe_allow_html=True)
     menu = st.radio(
         "",
